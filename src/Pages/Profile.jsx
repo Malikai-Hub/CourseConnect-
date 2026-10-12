@@ -19,6 +19,7 @@ export default function Profile() {
         <footer>
           <h4>Completed Assignments:</h4>
           <h4>Completed Tests:</h4>
+          <h4>Posts:</h4>
         </footer>
       </body>
     </>
