@@ -1,13 +1,27 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 export default function Login() {
-  const navigate = useNavigate;
-
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const onLogin = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email");
+    const password = formData.get("password");
+    try {
+      await login({ email, password });
+      navigate("/");
+    } catch (e) {
+      setError("Error");
+    }
+  };
   return (
     <>
       <h1>Continue learning</h1>
-      <form>
+      <form onSubmit={onLogin}>
         <label>
           Email
           <input type="email" name="email" required />
@@ -16,8 +30,10 @@ export default function Login() {
           Password
           <input type="password" name="password" required />
         </label>
+        <button>Sign in</button>
+        {error && <p>{error}</p>}
       </form>
-      <button>Sign in</button>
+
       <footer>
         <p>
           Need an account? Start learning <Link to="/Register">here</Link>

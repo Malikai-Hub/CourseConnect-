@@ -12,13 +12,11 @@ export default function Assignments() {
         <h1>Course Connect</h1>
         <h2>Assignments</h2>
       </header>
-      <body>
-        <h4>My Assignments:</h4>
-        <h5>Created by me:</h5>
-        <footer>
-          <h6>Completed Assignments:</h6>
-        </footer>
-      </body>
+      <h4>My Assignments:</h4>
+      <h5>Created by me:</h5>
+      <footer>
+        <h6>Completed Assignments:</h6>
+      </footer>
     </>
   );
 }

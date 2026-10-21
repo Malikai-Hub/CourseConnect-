@@ -16,12 +16,12 @@ export default function Home() {
         <h1>Course Connect</h1>
         <h2>Dashboard</h2>
       </header>
-      <body>
-        <h2>Upcoming tasks:</h2>
-        <h2>Upcoming study sessions:</h2>
-        <h3>Recent Study Sets:</h3>
-        <h4>Recent Post Replies:</h4>
-      </body>
+
+      <h2>Upcoming tasks:</h2>
+      <h2>Upcoming study sessions:</h2>
+      <h3>Recent Study Sets:</h3>
+      <h4>Recent Post Replies:</h4>
+
       <footer></footer>
     </>
   );

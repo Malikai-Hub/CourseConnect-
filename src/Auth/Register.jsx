@@ -1,13 +1,29 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { useAuth } from "./AuthContext";
 
 export default function Register() {
-  const navigate = useNavigate;
+  const navigate = useNavigate();
+  const { register } = useAuth();
+  const [error, setError] = useState("");
 
+  const onRegister = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const username = formData.get("username");
+    const email = formData.get("email");
+    const password = formData.get("password");
+    try {
+      await register({ username, email, password });
+      navigate("/");
+    } catch (e) {
+      setError("Error");
+    }
+  };
   return (
     <>
       <h1>Start learning</h1>
-      <form>
+      <form onSubmit={onRegister}>
         <label>
           Username
           <input type="text" name="username" required />
@@ -24,10 +40,11 @@ export default function Register() {
         <button>Sign up</button>
         <footer>
           <p>
-            Already have an account? Continue learning{" "}
+            Already have an account? Continue learning
             <Link to="/Login">here.</Link>
           </p>
         </footer>
+        {error && <p>{error}</p>}
       </form>
     </>
   );

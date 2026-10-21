@@ -12,37 +12,36 @@ export default function Study() {
       <header>
         <h1>Course Connect</h1>
       </header>
-      <body>
-        <form>
-          <label>
-            <p>Search for study set:</p>
-            <input
-              name="search"
-              type="search"
-              placeholder="Search for set..."
-              aria-label="Search for set"
-            />
-            <button>Search</button>
-          </label>
-        </form>
-        <form>
-          <p>Create study set:</p>
+
+      <form>
+        <label>
+          <p>Search for study set:</p>
           <input
-            name="name"
-            type="name"
-            placeholder="Enter name..."
-            aria-label="Enter name"
+            name="search"
+            type="search"
+            placeholder="Search for set..."
+            aria-label="Search for set"
           />
-          <input
-            name="description"
-            type="description"
-            placeholder="Enter description..."
-            aria-label="Enter description"
-          />
-          <button>Create</button>
-        </form>
-        <h2>Study Sets:</h2>
-      </body>
+          <button>Search</button>
+        </label>
+      </form>
+      <form>
+        <p>Create study set:</p>
+        <input
+          name="name"
+          type="name"
+          placeholder="Enter name..."
+          aria-label="Enter name"
+        />
+        <input
+          name="description"
+          type="description"
+          placeholder="Enter description..."
+          aria-label="Enter description"
+        />
+        <button>Create</button>
+      </form>
+      <h2>Study Sets:</h2>
     </>
   );
 }
