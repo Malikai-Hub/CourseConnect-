@@ -1,3 +1,12 @@
 import express from "express";
+import getUserFromToken from "./middleware/getUserFromToken.js";
+import groupsRouter from "./api/groups.js";
+import usersRouter from "./api/users.js";
+import cors from "cors";
 const app = express();
+app.use(cors({ origin: "http://localhost:5173" }));
+app.use(express.json());
+app.use(getUserFromToken);
+app.use("/api/groups", groupsRouter);
+app.use("/api/users", usersRouter);
 export default app;

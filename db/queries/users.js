@@ -1,4 +1,4 @@
-import db from "#db/client";
+import db from "#db/client.js";
 import bcrypt from "bcrypt";
 
 export async function createUser(email, username, password) {
@@ -33,7 +33,7 @@ export async function getUserByEmailAndPassword(email, password) {
 
 export async function getUserById(id) {
   const sql = `
-  SELECT * FROM users WHERE user_id = $1
+  SELECT * FROM users WHERE id = $1
   `;
   const {
     rows: [user],

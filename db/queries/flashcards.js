@@ -1,4 +1,4 @@
-import db from "#db/client";
+import db from "#db/client.js";
 
 export async function createFlashcard(studySetId, question, answer) {
   const sql = `

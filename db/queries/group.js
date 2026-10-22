@@ -1,4 +1,4 @@
-import db from "#db/client";
+import db from "#db/client.js";
 
 export async function createGroup(userId, date, description, title) {
   const sql = `

@@ -30,7 +30,7 @@ CREATE TABLE assignments(
     assignment_description TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     due_date DATE,
-    is_complete BOOLEAN NOT NULL DEFAULT FALSE,
+    is_complete BOOLEAN NOT NULL DEFAULT FALSE
     
 );
 
