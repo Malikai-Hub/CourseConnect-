@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Assignments.css";
 
@@ -19,21 +20,26 @@ const sampleAssignments = [
 ];
 
 export default function Assignments() {
+  const [showForm, setShowForm] = useState(false);
+
   return (
     <div className="assignments-page">
       <aside className="assignments-sidebar">
         <Link to="/" className="assignments-brand">
           🎓 Course Connect
         </Link>
+
         <p className="assignments-menu-label">MENU</p>
 
         <nav className="assignments-nav">
           <Link to="/">🏠 Dashboard</Link>
           <Link to="/Study">📚 Study</Link>
           <Link to="/Groups">👥 Groups</Link>
+
           <Link to="/Assignments" className="selected">
             📝 Assignments
           </Link>
+
           <Link to="/Profile">👤 Profile</Link>
         </nav>
       </aside>
@@ -42,9 +48,12 @@ export default function Assignments() {
         <header className="assignments-header">
           <div>
             <p className="assignments-eyebrow">YOUR LEARNING SPACE</p>
+
             <h1>Assignments</h1>
+
             <p>Organize your tasks and keep track of your progress.</p>
           </div>
+
           <Link to="/" className="assignments-home-button">
             ← Dashboard
           </Link>
@@ -52,8 +61,11 @@ export default function Assignments() {
 
         <section className="assignments-welcome">
           <h2>One task at a time!</h2>
+
           <p>Stay organized, manage your work, and celebrate your progress.</p>
         </section>
+
+        {/* MY ASSIGNMENTS */}
 
         <section className="assignment-section">
           <div className="assignment-section-heading">
@@ -62,17 +74,57 @@ export default function Assignments() {
               <p>Tasks you're working on.</p>
             </div>
 
-            <span className="assignment-count">
-              {sampleAssignments.length} examples
-            </span>
+            <div className="assignment-heading-actions">
+              <span className="assignment-count">
+                {sampleAssignments.length} examples
+              </span>
+
+              <button
+                className="new-assignment-button"
+                onClick={() => setShowForm(!showForm)}
+              >
+                {showForm ? "Cancel" : "+ New Assignment"}
+              </button>
+            </div>
           </div>
+
+          {/* NEW ASSIGNMENT FORM */}
+
+          {showForm && (
+            <form className="assignment-form">
+              <h3>Create an Assignment</h3>
+
+              <label>
+                Assignment Name
+                <input type="text" placeholder="Example: Finish chapter 5" />
+              </label>
+
+              <label>
+                Description
+                <textarea placeholder="What do you need to complete?" />
+              </label>
+
+              <label>
+                Due Date
+                <input type="date" />
+              </label>
+
+              <button type="submit" className="create-assignment-button">
+                Create Assignment
+              </button>
+            </form>
+          )}
+
+          {/* SAMPLE ASSIGNMENTS */}
 
           <div className="assignment-list">
             {sampleAssignments.map((assignment) => (
               <article className="assignment-card" key={assignment.id}>
                 <div className="assignment-card-icon">📝</div>
+
                 <div className="assignment-details">
                   <h3>{assignment.title}</h3>
+
                   <p>{assignment.course}</p>
 
                   <p className="assignment-due">Due: {assignment.due}</p>
@@ -82,41 +134,51 @@ export default function Assignments() {
               </article>
             ))}
           </div>
+
           <p className="sample-notice">
             These are sample assignments for the layout, not saved tasks.
           </p>
         </section>
 
+        {/* CREATED BY ME */}
+
         <section className="assignment-section">
           <div className="assignment-section-heading">
             <div>
               <h2>Created by Me</h2>
+
               <p>Assignments you create for your study sessions.</p>
             </div>
           </div>
 
           <div className="assignment-empty">
             <span>✏️</span>
+
             <h3>Your created assignments will appear here</h3>
 
             <p>
-              We'll connect this section to your backend after checking the
+              /We'll connect this section to your backend after checking the
               available API routes.
             </p>
           </div>
         </section>
 
+        {/* COMPLETED ASSIGNMENTS */}
+
         <section className="assignment-section">
           <div className="assignment-section-heading">
             <div>
               <h2>Completed Assignments</h2>
-              <p>Keep track of work you've finished.</p>
+
+              <p>Keep track of the work you've finished.</p>
             </div>
           </div>
 
           <div className="assignment-empty">
             <span>✅</span>
+
             <h3>No completed assignments to display yet</h3>
+
             <p>Completed tasks will appear here when real data is connected.</p>
           </div>
         </section>

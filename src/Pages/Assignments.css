@@ -287,3 +287,24 @@
     margin-left: 62px;
   }
 }
+
+.assignment-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.new-assignment-button {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #3157a4;
+  color: white;
+}
+
+.new-assignment-button:hover {
+  opacity: 0.9;
+}
