@@ -4,7 +4,7 @@ import groupsRouter from "./api/groups.js";
 import usersRouter from "./api/users.js";
 import cors from "cors";
 const app = express();
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({ origin: "http://localhost:5174" }));
 app.use(express.json());
 app.use(getUserFromToken);
 app.use("/api/groups", groupsRouter);

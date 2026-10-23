@@ -5,16 +5,18 @@ import {
   getGroupsByUserId,
   addUserToGroup,
   removeUserFromGroup,
+  searchGroups,
+  getGroupById,
+  getAllGroups,
 } from "../db/queries/group.js";
 import requireBody from "../middleware/requireBody.js";
 import requireUser from "../middleware/requireUser.js";
 
 const router = express.Router();
 
-router.use(requireUser);
-
 router.post(
   "/",
+  requireUser,
   requireBody(["group_title", "group_description"]),
   async (req, res) => {
     const { group_title, group_description } = req.body;
@@ -33,39 +35,102 @@ router.post(
 );
 
 //Gets all groups the user belongs to
-router.get("/", async (req, res) => {
+router.get("/", requireUser, async (req, res) => {
   const groups = await getGroupsByUserId(req.user.id);
   res.send(groups);
 });
 
-//Gets a specific group the user belongs to
-router.param("groupId", async (req, res, next, groupId) => {
-  const group = await getGroupByUserId(req.user.id, Number(groupId));
+router.get("/search", async (req, res) => {
+  const search = req.query.q?.trim();
+  if (!search) {
+    return res.status(400).send({
+      error: "Please try searching for group.",
+    });
+  }
 
-  if (!group) return res.status(404).send("Group not found");
+  const groups = await searchGroups(search);
 
-  req.group = group;
-  next();
+  res.send(groups);
 });
 
-router.get("/:groupId", (req, res) => {
-  res.send(req.group);
+router.get("/browse", async (req, res) => {
+  const groups = await getAllGroups();
+  res.send(groups);
 });
 
-router.post("/:groupId/members", async (req, res) => {
-  const member = await addUserToGroup(req.user.id, Number(req.params.groupId));
+// Gets details for a specific group
+router.get("/:groupId", async (req, res) => {
+  const groupId = Number(req.params.groupId);
+
+  if (!Number.isInteger(groupId) || groupId <= 0) {
+    return res.status(400).send({
+      error: "Group ID must be a positive integer.",
+    });
+  }
+
+  const group = await getGroupById(groupId);
+
+  if (!group) {
+    return res.status(404).send({
+      error: "Group not found.",
+    });
+  }
+
+  res.send(group);
+});
+
+//Used ai to help with this function
+router.post("/:groupId/members", requireUser, async (req, res) => {
+  const groupId = Number(req.params.groupId);
+
+  if (!Number.isInteger(groupId) || groupId <= 0) {
+    return res.status(400).send({
+      error: "Group ID must be a positive integer.",
+    });
+  }
+
+  const group = await getGroupById(groupId);
+
+  if (!group) {
+    return res.status(404).send({
+      error: "Group not found.",
+    });
+  }
+
+  const member = await addUserToGroup(req.user.id, groupId);
+
+  if (!member) {
+    return res.status(409).send({
+      error: "You are already a member of this group.",
+    });
+  }
 
   res.status(201).send(member);
 });
 
-router.delete("/:groupId/members/me", async (req, res) => {
-  const member = await removeUserFromGroup(
-    req.user.id,
-    Number(req.params.groupId),
-  );
+router.delete("/:groupId/members/me", requireUser, async (req, res) => {
+  const groupId = Number(req.params.groupId);
+
+  if (!Number.isInteger(groupId) || groupId <= 0) {
+    return res.status(400).send({
+      error: "Group ID must be a positive integer.",
+    });
+  }
+
+  const group = await getGroupById(groupId);
+
+  if (!group) {
+    return res.status(404).send({
+      error: "Group not found.",
+    });
+  }
+
+  const member = await removeUserFromGroup(req.user.id, groupId);
 
   if (!member) {
-    return res.status(404).send("You are not a member of this group");
+    return res.status(404).send({
+      error: "You are not a member of this group.",
+    });
   }
 
   res.sendStatus(204);
