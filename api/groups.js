@@ -1,7 +1,6 @@
 import express from "express";
 import {
   createGroup,
-  getGroupByUserId,
   getGroupsByUserId,
   addUserToGroup,
   removeUserFromGroup,
@@ -64,7 +63,7 @@ router.get("/:groupId", async (req, res) => {
 
   if (!Number.isInteger(groupId) || groupId <= 0) {
     return res.status(400).send({
-      error: "Group ID must be a positive integer.",
+      error: "Error",
     });
   }
 
@@ -85,7 +84,7 @@ router.post("/:groupId/members", requireUser, async (req, res) => {
 
   if (!Number.isInteger(groupId) || groupId <= 0) {
     return res.status(400).send({
-      error: "Group ID must be a positive integer.",
+      error: "Error",
     });
   }
 
@@ -113,7 +112,7 @@ router.delete("/:groupId/members/me", requireUser, async (req, res) => {
 
   if (!Number.isInteger(groupId) || groupId <= 0) {
     return res.status(400).send({
-      error: "Group ID must be a positive integer.",
+      error: "Error",
     });
   }
 
