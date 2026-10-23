@@ -3,110 +3,313 @@ import "./Home.css";
 
 export default function Home() {
   return (
-    <div className="dashboard">
-      <aside className="sidebar">
-        <div className="brand">
-          <span className="brand-icon">🎓</span>
-          <h2>Course Connect</h2>
-        </div>
+    <div className="home-page">
+      {/* NAVIGATION */}
+      <header className="topbar">
+        <Link to="/" className="logo" aria-label="Course Connect home">
+          <span className="cc-logo" aria-hidden="true">
+            <span className="cc-shape cc-blue"></span>
+            <span className="cc-shape cc-coral"></span>
+          </span>
 
-        <p className="menu-label">MENU</p>
+          <span className="logo-text">
+            Course <strong>Connect</strong>
+          </span>
+        </Link>
 
-        <nav className="sidebar-nav">
-          <Link to="/" className="nav-link active">
-            🏠 Dashboard
+        <nav className="top-nav">
+          <Link to="/" className="top-nav-link active">
+            Home
           </Link>
-          <Link to="/Study" className="nav-link">
-            📚 Study
+
+          <Link to="/Groups" className="top-nav-link">
+            Groups
           </Link>
-          <Link to="/Groups" className="nav-link">
-            👥 Groups
+
+          <Link to="/Study" className="top-nav-link">
+            Study
           </Link>
-          <Link to="/Assignments" className="nav-link">
-            📝 Assignments
+
+          <Link to="/Assignments" className="top-nav-link">
+            Assignments
           </Link>
-          <Link to="/Profile" className="nav-link">
-            👤 Profile
+
+          <Link to="/Profile" className="top-nav-link">
+            Profile
           </Link>
         </nav>
 
-        <div className="sidebar-bottom">
-          <p>Ready to learn something new?</p>
-          <Link to="/Study" className="study-button">
-            Start studying →
+        <div className="nav-actions">
+          <div className="search-box">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6"></circle>
+              <path d="m16 16 4 4"></path>
+            </svg>
+
+            <input
+              type="search"
+              placeholder="Search..."
+              aria-label="Search Course Connect"
+            />
+          </div>
+
+          <Link to="/Profile" className="profile-circle" aria-label="Profile">
+            M
           </Link>
         </div>
-      </aside>
+      </header>
 
-      <main className="dashboard-main">
-        <header className="dashboard-header">
-          <div>
-            <p className="eyebrow">YOUR LEARNING SPACE</p>
-            <h1>Welcome to Course Connect!</h1>
-            <p className="subtitle">
-              Stay organized, study smarter, and learn together.
+      <main className="home-main">
+        {/* HERO */}
+        <section className="hero">
+          <div className="hero-glow hero-glow-blue"></div>
+          <div className="hero-glow hero-glow-coral"></div>
+
+          <div className="hero-content">
+            <p className="hero-eyebrow">GOOD TO SEE YOU</p>
+
+            <h1>
+              Study together.
+              <span>Go further.</span>
+            </h1>
+
+            <p className="hero-description">
+              Your classes. Your people. A more connected way to learn.
             </p>
-          </div>
-          <Link to="/Profile" className="profile-button">
-            My Profile →
-          </Link>
-        </header>
 
-        <section className="welcome-card">
-          <div>
-            <p className="welcome-label">YOUR JOURNEY STARTS HERE</p>
-            <h2>Small steps lead to big achievements.</h2>
-            <p>Make today a great day to learn something new.</p>
-            <Link to="/Study" className="primary-button">
-              Explore Study Tools →
-            </Link>
-          </div>
-          <div className="welcome-emoji" aria-hidden="true">
-            📖
-          </div>
-        </section>
+            <div className="hero-actions">
+              <Link to="/Groups" className="button button-dark">
+                Join a Study Group
+                <span>→</span>
+              </Link>
 
-        <section className="dashboard-section">
-          <div className="section-heading">
-            <div>
-              <h2>Your Learning Hub</h2>
-              <p>Quick access to your study activities.</p>
+              <Link to="/Study" className="button button-light">
+                Create Study Set
+              </Link>
             </div>
           </div>
 
-          <div className="feature-grid">
-            <Link to="/Assignments" className="feature-card">
-              <span className="feature-icon purple">📝</span>
-              <h3>Upcoming Tasks</h3>
-              <p>Keep track of your assignments and deadlines.</p>
-              <span className="card-link">View assignments →</span>
-            </Link>
+          <div className="hero-note" aria-hidden="true">
+            <span className="note-arrow">↗</span>
 
-            <Link to="/Groups" className="feature-card">
-              <span className="feature-icon green">👥</span>
-              <h3>Study Sessions</h3>
-              <p>Connect with classmates and learn together.</p>
-              <span className="card-link">Explore groups →</span>
-            </Link>
-
-            <Link to="/Study" className="feature-card">
-              <span className="feature-icon orange">💡</span>
-              <h3>Recent Study Sets</h3>
-              <p>Find study materials and review what you've learned.</p>
-              <span className="card-link">Start reviewing →</span>
-            </Link>
-
-            <Link to="/Groups" className="feature-card">
-              <span className="feature-icon blue">💬</span>
-              <h3>Recent Post Replies</h3>
-              <p>Continue conversations with your study community.</p>
-              <span className="card-link">Visit groups →</span>
-            </Link>
+            <p>
+              Same classes.
+              <br />
+              Brighter brains.
+            </p>
           </div>
         </section>
 
-        <footer className="dashboard-footer">
-          <p>Course Connect · Learn together, grow together.</p>
+        {/* QUICK ACTIONS */}
+        <section className="quick-actions" aria-label="Quick actions">
+          <Link to="/Groups" className="quick-card">
+            <span className="quick-icon icon-blue">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="9" cy="8" r="3"></circle>
+                <circle cx="17" cy="9" r="2"></circle>
+                <path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"></path>
+                <path d="M15 14c3 0 5 1.7 5 4"></path>
+              </svg>
+            </span>
+
+            <span>
+              <strong>Find a Group</strong>
+              <small>Connect with classmates</small>
+            </span>
+
+            <span className="quick-arrow">→</span>
+          </Link>
+
+          <Link to="/Study" className="quick-card">
+            <span className="quick-icon icon-coral">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 5.5c3-1 5-.5 8 1.5v12c-3-2-5-2.5-8-1.5z"></path>
+                <path d="M20 5.5c-3-1-5-.5-8 1.5v12c3-2 5-2.5 8-1.5z"></path>
+              </svg>
+            </span>
+
+            <span>
+              <strong>Create a Study Set</strong>
+              <small>Build your study materials</small>
+            </span>
+
+            <span className="quick-arrow">→</span>
+          </Link>
+
+          <Link to="/Assignments" className="quick-card">
+            <span className="quick-icon icon-green">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                <path d="M8 3v4M16 3v4M4 10h16"></path>
+              </svg>
+            </span>
+
+            <span>
+              <strong>View Assignments</strong>
+              <small>Stay on top of due dates</small>
+            </span>
+
+            <span className="quick-arrow">→</span>
+          </Link>
+
+          <Link to="/Study" className="quick-card">
+            <span className="quick-icon icon-purple">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="9" cy="8" r="3"></circle>
+                <circle cx="17" cy="9" r="2"></circle>
+                <path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"></path>
+                <path d="M15 14c3 0 5 1.7 5 4"></path>
+              </svg>
+            </span>
+
+            <span>
+              <strong>Start Studying</strong>
+              <small>Pick up where you left off</small>
+            </span>
+
+            <span className="quick-arrow">→</span>
+          </Link>
+        </section>
+
+        {/* DASHBOARD CONTENT */}
+        <section className="dashboard-grid">
+          <article className="dashboard-card">
+            <div className="card-heading">
+              <div>
+                <p className="card-kicker">STAY ON TRACK</p>
+                <h2>Upcoming Assignments</h2>
+              </div>
+
+              <Link to="/Assignments">View all →</Link>
+            </div>
+
+            <div className="empty-state">
+              <span className="empty-icon icon-blue">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 3h7l4 4v14H7z"></path>
+                  <path d="M14 3v5h5M10 13h5M10 17h5"></path>
+                </svg>
+              </span>
+
+              <div>
+                <h3>Your assignments will appear here</h3>
+                <p>Keep track of upcoming work and deadlines.</p>
+              </div>
+            </div>
+          </article>
+
+          <article className="dashboard-card">
+            <div className="card-heading">
+              <div>
+                <p className="card-kicker">LEARN TOGETHER</p>
+                <h2>Your Groups</h2>
+              </div>
+
+              <Link to="/Groups">View all →</Link>
+            </div>
+
+            <div className="empty-state">
+              <span className="empty-icon icon-coral">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="9" cy="8" r="3"></circle>
+                  <circle cx="17" cy="9" r="2"></circle>
+                  <path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"></path>
+                  <path d="M15 14c3 0 5 1.7 5 4"></path>
+                </svg>
+              </span>
+
+              <div>
+                <h3>Your study groups will appear here</h3>
+                <p>Join a group and start learning with classmates.</p>
+              </div>
+            </div>
+          </article>
+
+          <article className="dashboard-card continue-card">
+            <div className="card-heading">
+              <div>
+                <p className="card-kicker">KEEP GOING</p>
+                <h2>Continue Studying</h2>
+              </div>
+
+              <Link to="/Study">View all →</Link>
+            </div>
+
+            <div className="study-preview">
+              <span className="study-preview-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 4h14v16H5z"></path>
+                  <path d="M8 8h8M8 12h6M8 16h5"></path>
+                </svg>
+              </span>
+
+              <div className="study-preview-text">
+                <h3>Ready when you are.</h3>
+                <p>Your recent study sets will appear here.</p>
+              </div>
+
+              <Link
+                to="/Study"
+                className="play-button"
+                aria-label="Start studying"
+              >
+                →
+              </Link>
+            </div>
+          </article>
+        </section>
+
+        {/* BOTTOM SECTION */}
+        <section className="bottom-grid">
+          <article className="activity-card">
+            <div className="card-heading">
+              <div>
+                <p className="card-kicker">YOUR COMMUNITY</p>
+                <h2>Recent Activity</h2>
+              </div>
+
+              <Link to="/Groups">Explore →</Link>
+            </div>
+
+            <div className="activity-empty">
+              <span className="activity-dot"></span>
+
+              <div>
+                <h3>Nothing new yet</h3>
+                <p>
+                  Group posts, replies, and study activity will show up here.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article className="promo-card">
+            <div className="promo-glow"></div>
+
+            <div className="promo-content">
+              <p>BETTER TOGETHER</p>
+
+              <h2>
+                Connect.
+                <br />
+                Study.
+                <br />
+                Grow.
+              </h2>
+
+              <span>Learning is better with your people.</span>
+            </div>
+
+            <Link to="/Groups" className="promo-button">
+              Explore Groups →
+            </Link>
+          </article>
+        </section>
+
+        <footer className="home-footer">
+          <span>Course Connect</span>
+
+          <p>Learn together. Go further.</p>
         </footer>
       </main>
     </div>
