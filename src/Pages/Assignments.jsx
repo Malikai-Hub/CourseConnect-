@@ -1,23 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Assignments.css";
 
-const sampleAssignments = [
-  {
-    id: 1,
-    title: "Review lecture notes",
-    course: "Study Session",
-    due: "Add your due date",
-    status: "In progress",
-  },
-  {
-    id: 2,
-    title: "Prepare study questions",
-    course: "Exam Preparation",
-    due: "Add your due date",
-    status: "Not started",
-  },
-];
-
 export default function Assignments() {
   return (
     <div className="assignments-page">
@@ -117,7 +100,6 @@ export default function Assignments() {
           <div className="assignment-empty">
             <span>✅</span>
             <h3>No completed assignments to display yet</h3>
-            <p>Completed tasks will appear here when real data is connected.</p>
           </div>
         </section>
 

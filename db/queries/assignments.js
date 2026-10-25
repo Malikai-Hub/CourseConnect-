@@ -70,6 +70,18 @@ export async function deleteAssignment(assignment_id) {
     `;
   const {
     rows: [assignment],
-  } = await db.query(sql, assignment_id);
+  } = await db.query(sql, [assignment_id]);
   return assignment;
+}
+
+export async function getAssignmentsByGroupId(groupId) {
+  const sql = `
+    SELECT *
+    FROM assignments
+    WHERE group_id = $1
+    ORDER BY due_date ASC NULLS LAST
+  `;
+
+  const { rows } = await db.query(sql, [groupId]);
+  return rows;
 }

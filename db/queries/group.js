@@ -74,11 +74,16 @@ export async function searchGroups(search) {
   return rows;
 }
 
-export async function getGroupById(groupId) {
+//Used ai to help with this query
+export async function getGroupById(groupId, userId = null) {
   const sql = `
     SELECT
       groups.*,
-      COUNT(group_members.user_id)::INT AS member_count
+      COUNT(group_members.user_id)::INT AS member_count,
+      COALESCE(
+        BOOL_OR(group_members.user_id = $2),
+        false
+      ) AS is_member
     FROM groups
     LEFT JOIN group_members
       ON groups.group_id = group_members.group_id
@@ -88,7 +93,7 @@ export async function getGroupById(groupId) {
 
   const {
     rows: [group],
-  } = await db.query(sql, [groupId]);
+  } = await db.query(sql, [groupId, userId]);
 
   return group;
 }

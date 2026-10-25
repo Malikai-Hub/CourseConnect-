@@ -67,7 +67,7 @@ router.get("/:groupId", async (req, res) => {
     });
   }
 
-  const group = await getGroupById(groupId);
+  const group = await getGroupById(groupId, req.user?.id ?? null);
 
   if (!group) {
     return res.status(404).send({

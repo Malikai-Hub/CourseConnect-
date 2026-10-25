@@ -14,7 +14,13 @@ export default function GroupDetails() {
   useEffect(() => {
     async function fetchGroup() {
       try {
-        const response = await fetch(`${API}/groups/${groupId}`);
+        const response = await fetch(
+          `${API}/groups/${groupId}`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+          },
+          [groupId, token],
+        );
 
         if (!response.ok) {
           throw new Error("Could not load group details.");
@@ -55,7 +61,11 @@ export default function GroupDetails() {
       </p>
 
       {token ? (
-        <button>Join Group</button>
+        group.is_member ? (
+          <button>Leave Group</button>
+        ) : (
+          <button>Join Group</button>
+        )
       ) : (
         <p>
           Please <Link to="/Login">log in</Link> to join this group.
