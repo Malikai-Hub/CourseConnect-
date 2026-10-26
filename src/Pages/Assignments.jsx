@@ -1,112 +1,128 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./Assignments.css";
+import { useAuth } from "../Auth/AuthContext";
+
+const API = import.meta.env.VITE_API;
 
 export default function Assignments() {
+  const { token } = useAuth();
+  const [assignments, setAssignments] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function getAssignments() {
+      try {
+        const response = await fetch(`${API}/assignments`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const message = await response.text();
+          throw new Error(`Error ${response.status}: ${message}`);
+        }
+
+        const data = await response.json();
+        setAssignments(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+
+    if (token) {
+      getAssignments();
+    } else {
+      setAssignments([]);
+    }
+  }, [token]);
+
+  const completedAssignments = assignments.filter(
+    (assignment) => assignment.is_complete,
+  );
+
+  const activeAssignments = assignments.filter(
+    (assignment) => !assignment.is_complete,
+  );
+
+  const userId = token ? JSON.parse(atob(token.split(".")[1])).id : null;
+
+  const myAssignments = assignments.filter(
+    (assignment) => assignment.created_by === Number(userId),
+  );
+
   return (
-    <div className="assignments-page">
-      <aside className="assignments-sidebar">
-        <Link to="/" className="assignments-brand">
-          🎓 Course Connect
-        </Link>
-        <p className="assignments-menu-label">MENU</p>
+    <>
+      <nav>
+        <Link to="/">Home</Link> <Link to="/Groups">Groups</Link>{" "}
+        <Link to="/Profile">Profile</Link>
+      </nav>
 
-        <nav className="assignments-nav">
-          <Link to="/">🏠 Dashboard</Link>
-          <Link to="/Study">📚 Study</Link>
-          <Link to="/Groups">👥 Groups</Link>
-          <Link to="/Assignments" className="selected">
-            📝 Assignments
-          </Link>
-          <Link to="/Profile">👤 Profile</Link>
-        </nav>
-      </aside>
+      <header>
+        <h1>Course Connect</h1>
+        <h2>Assignments</h2>
+      </header>
 
-      <main className="assignments-main">
-        <header className="assignments-header">
-          <div>
-            <p className="assignments-eyebrow">YOUR LEARNING SPACE</p>
-            <h1>Assignments</h1>
-            <p>Organize your tasks and keep track of your progress.</p>
-          </div>
-          <Link to="/" className="assignments-home-button">
-            ← Dashboard
-          </Link>
-        </header>
+      {error && <p>{error}</p>}
 
-        <section className="assignments-welcome">
-          <h2>One task at a time!</h2>
-          <p>Stay organized, manage your work, and celebrate your progress.</p>
-        </section>
+      {!token && (
+        <p>
+          Please <Link to="/Login">log in</Link> to view assignments.
+        </p>
+      )}
 
-        <section className="assignment-section">
-          <div className="assignment-section-heading">
-            <div>
-              <h2>My Assignments</h2>
-              <p>Tasks you're working on.</p>
-            </div>
+      {token && !error && (
+        <>
+          <section>
+            <h3>My Assignments</h3>
+            {activeAssignments.length === 0 ? (
+              <p>No active assignments yet.</p>
+            ) : (
+              activeAssignments.map((assignment) => (
+                <article key={assignment.assignment_id}>
+                  <h4>{assignment.assignment_name}</h4>
+                  <p>{assignment.assignment_description}</p>
+                  <p>Group: {assignment.group_title}</p>
+                  <p>
+                    Due:{" "}
+                    {assignment.due_date
+                      ? new Date(assignment.due_date).toLocaleDateString()
+                      : "No due date"}
+                  </p>
+                </article>
+              ))
+            )}
+          </section>
 
-            <span className="assignment-count">
-              {sampleAssignments.length} examples
-            </span>
-          </div>
+          <section>
+            <h3>Created by Me</h3>
+            {myAssignments.length === 0 ? (
+              <p>You haven't created any assignments yet.</p>
+            ) : (
+              myAssignments.map((assignment) => (
+                <p key={assignment.assignment_id}>
+                  {assignment.assignment_name} — {assignment.group_title}
+                </p>
+              ))
+            )}
+          </section>
 
-          <div className="assignment-list">
-            {sampleAssignments.map((assignment) => (
-              <article className="assignment-card" key={assignment.id}>
-                <div className="assignment-card-icon">📝</div>
-                <div className="assignment-details">
-                  <h3>{assignment.title}</h3>
-                  <p>{assignment.course}</p>
+          <section>
+            <h3>Completed Assignments</h3>
+            {completedAssignments.length === 0 ? (
+              <p>No completed assignments yet.</p>
+            ) : (
+              completedAssignments.map((assignment) => (
+                <p key={assignment.assignment_id}>
+                  {assignment.assignment_name} — {assignment.group_title}
+                </p>
+              ))
+            )}
+          </section>
+        </>
+      )}
 
-                  <p className="assignment-due">Due: {assignment.due}</p>
-                </div>
-
-                <span className="assignment-status">{assignment.status}</span>
-              </article>
-            ))}
-          </div>
-          <p className="sample-notice">
-            These are sample assignments for the layout, not saved tasks.
-          </p>
-        </section>
-
-        <section className="assignment-section">
-          <div className="assignment-section-heading">
-            <div>
-              <h2>Created by Me</h2>
-              <p>Assignments you create for your study sessions.</p>
-            </div>
-          </div>
-
-          <div className="assignment-empty">
-            <span>✏️</span>
-            <h3>Your created assignments will appear here</h3>
-
-            <p>
-              We'll connect this section to your backend after checking the
-              available API routes.
-            </p>
-          </div>
-        </section>
-
-        <section className="assignment-section">
-          <div className="assignment-section-heading">
-            <div>
-              <h2>Completed Assignments</h2>
-              <p>Keep track of work you've finished.</p>
-            </div>
-          </div>
-
-          <div className="assignment-empty">
-            <span>✅</span>
-            <h3>No completed assignments to display yet</h3>
-          </div>
-        </section>
-
-        <footer className="assignments-footer">
-          Course Connect · Learn together, grow together.
-        </footer>
-      </main>
-    </div>
+      <footer></footer>
+    </>
   );
 }

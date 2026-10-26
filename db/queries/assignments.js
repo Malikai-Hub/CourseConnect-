@@ -85,3 +85,19 @@ export async function getAssignmentsByGroupId(groupId) {
   const { rows } = await db.query(sql, [groupId]);
   return rows;
 }
+
+export async function getAssignmentsByUserId(userId) {
+  const sql = `
+    SELECT assignments.*, groups.group_title
+    FROM assignments
+    JOIN group_members
+      ON assignments.group_id = group_members.group_id
+    JOIN groups
+      ON assignments.group_id = groups.group_id
+    WHERE group_members.user_id = $1
+    ORDER BY assignments.due_date ASC NULLS LAST
+  `;
+
+  const { rows } = await db.query(sql, [userId]);
+  return rows;
+}

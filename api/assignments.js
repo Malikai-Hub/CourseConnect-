@@ -7,6 +7,7 @@ import {
   getAssignmentById,
   updateAssignment,
   deleteAssignment,
+  getAssignmentsByUserId,
 } from "../db/queries/assignments.js";
 
 import requireBody from "../middleware/requireBody.js";
@@ -20,6 +21,14 @@ router.get("/groups/:groupId/assignments", async (req, res, next) => {
       Number(req.params.groupId),
     );
 
+    res.send(assignments);
+  } catch (error) {
+    next(error);
+  }
+});
+router.get("/assignments", async (req, res, next) => {
+  try {
+    const assignments = await getAssignmentsByUserId(req.user.id);
     res.send(assignments);
   } catch (error) {
     next(error);
