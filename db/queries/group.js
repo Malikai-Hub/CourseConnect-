@@ -109,3 +109,15 @@ export async function getAllGroups() {
   const { rows } = await db.query(sql);
   return rows;
 }
+
+export async function isUserInGroup(userId, groupId) {
+  const sql = `
+    SELECT 1
+    FROM group_members
+    WHERE user_id = $1 AND group_id = $2
+  `;
+
+  const { rows } = await db.query(sql, [userId, groupId]);
+
+  return rows.length > 0;
+}
