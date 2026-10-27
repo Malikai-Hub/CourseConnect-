@@ -1,5 +1,6 @@
 import db from "#db/client.js";
 
+// CREATE A NEW ASSIGNMENT
 export async function createAssignment(
   groupId,
   createdBy,
@@ -9,28 +10,54 @@ export async function createAssignment(
 ) {
   const sql = `
     INSERT INTO assignments (
-    group_id, created_by, assignment_name, assignment_description, due_date
+      group_id,
+      created_by,
+      assignment_name,
+      assignment_description,
+      due_date
     )
     VALUES ($1, $2, $3, $4, $5)
     RETURNING *
-    `;
+  `;
+
   const {
     rows: [assignment],
   } = await db.query(sql, [groupId, createdBy, name, description, dueDate]);
+
   return assignment;
 }
 
+// GET ALL ASSIGNMENTS FOR ONE GROUP
+export async function getAssignmentsByGroupId(groupId) {
+  const sql = `
+    SELECT *
+    FROM assignments
+    WHERE group_id = $1
+    ORDER BY due_date ASC
+  `;
+
+  const { rows: assignments } = await db.query(sql, [groupId]);
+
+  return assignments;
+}
+
+// GET ONE ASSIGNMENT
 export async function getAssignmentById(id) {
   const sql = `
-    SELECT * FROM assignments WHERE assignment_id = $1
+    SELECT *
+    FROM assignments
+    WHERE assignment_id = $1
     ORDER BY due_date ASC
-    `;
+  `;
+
   const {
     rows: [assignment],
   } = await db.query(sql, [id]);
+
   return assignment;
 }
 
+// UPDATE AN ASSIGNMENT
 export async function updateAssignment(
   name,
   description,
@@ -38,36 +65,46 @@ export async function updateAssignment(
   assignment_id,
 ) {
   const sql = `
-    UPDATE assignments 
+    UPDATE assignments
     SET
-    assignment_name = $1, assignment_description = $2, due_date = $3
+      assignment_name = $1,
+      assignment_description = $2,
+      due_date = $3
     WHERE assignment_id = $4
     RETURNING *
-    `;
+  `;
+
   const {
     rows: [assignment],
   } = await db.query(sql, [name, description, dueDate, assignment_id]);
+
   return assignment;
 }
 
-//Lets the user mark an assignment as complete or incomplete
+// MARK AN ASSIGNMENT COMPLETE OR INCOMPLETE
 export async function markAssignment(is_complete, assignment_id) {
   const sql = `
-UPDATE assignments
-SET is_complete = $1 WHERE assignment_id = $2
-RETURNING *
-`;
+    UPDATE assignments
+    SET is_complete = $1
+    WHERE assignment_id = $2
+    RETURNING *
+  `;
+
   const {
     rows: [assignment],
   } = await db.query(sql, [is_complete, assignment_id]);
+
   return assignment;
 }
 
+// DELETE AN ASSIGNMENT
 export async function deleteAssignment(assignment_id) {
   const sql = `
-    DELETE FROM assignments WHERE assignment_id = $1
+    DELETE FROM assignments
+    WHERE assignment_id = $1
     RETURNING *
-    `;
+  `;
+
   const {
     rows: [assignment],
   } = await db.query(sql, [assignment_id]);
