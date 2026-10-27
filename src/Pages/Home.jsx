@@ -184,7 +184,7 @@ export default function Home() {
             </div>
 
             <div className="empty-state">
-              <span className="empty-icon icon-blue">
+              <span className="empty-icon icon-green">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M7 3h7l4 4v14H7z"></path>
                   <path d="M14 3v5h5M10 13h5M10 17h5"></path>
