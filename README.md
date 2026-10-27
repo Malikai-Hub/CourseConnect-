@@ -1,6 +1,5 @@
 # Course Connect
 
-//Had ai write the ReadMe for me
 Course Connect is a full-stack web application designed to help students collaborate, stay organized, and manage their coursework in one place. Students can connect through study groups, share posts, and organize assignments in a centralized learning environment.
 
 ## Features
