@@ -46,10 +46,11 @@ export async function getPostById(postId) {
 
 export async function getPostsByGroupId(groupId) {
   const sql = `
-    SELECT *
+    SELECT posts.*, users.username
     FROM posts
-    WHERE group_id = $1
-    ORDER BY created_at DESC
+    JOIN users ON posts.user_id = users.id
+    WHERE posts.group_id = $1
+    ORDER BY posts.created_at DESC
   `;
 
   const { rows } = await db.query(sql, [groupId]);
