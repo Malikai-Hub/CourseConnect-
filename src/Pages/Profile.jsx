@@ -2,6 +2,55 @@ import { Link } from "react-router-dom";
 import "./Profile.css";
 
 export default function Profile() {
+  const { logout, token } = useAuth();
+  const [username, setUsername] = useState("");
+  const [activeGroups, setActiveGroups] = useState([]);
+  const [activeAssignments, setActiveAssignments] = useState([]);
+
+  useEffect(() => {
+    async function getProfile() {
+      if (!token) return;
+
+      const response = await fetch(`${import.meta.env.VITE_API}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+        setUsername(user.username);
+      }
+      const getGroup = await fetch(`${import.meta.env.VITE_API}/groups`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (getGroup.ok) {
+        const groups = await getGroup.json();
+        setActiveGroups(groups);
+      }
+      const getAssignments = await fetch(
+        `${import.meta.env.VITE_API}/assignments`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (getAssignments.ok) {
+        const assignments = await getAssignments.json();
+
+        setActiveAssignments(
+          assignments.filter((assignment) => !assignment.is_complete),
+        );
+      }
+    }
+
+    getProfile();
+  }, [token]);
   return (
     <div className="profile-page">
       <header className="profile-topbar">

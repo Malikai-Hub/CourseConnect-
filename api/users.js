@@ -1,7 +1,11 @@
 import express from "express";
 const router = express.Router();
 
-import { createUser, getUserByEmailAndPassword } from "../db/queries/users.js";
+import {
+  createUser,
+  getUserByEmailAndPassword,
+  getUserById,
+} from "../db/queries/users.js";
 import requireBody from "../middleware/requireBody.js";
 import { createToken } from "../utils/jwt.js";
 
@@ -23,4 +27,23 @@ router.post("/Login", requireBody(["email", "password"]), async (req, res) => {
   const token = createToken({ id: user.id });
   res.send(token);
 });
+
+router.get("/me", async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send("You must be logged in.");
+  }
+
+  const user = await getUserById(req.user.id);
+
+  if (!user) {
+    return res.status(404).send("User not found.");
+  }
+
+  res.send({
+    id: user.id,
+    username: user.username,
+    email: user.email,
+  });
+});
+
 export default router;

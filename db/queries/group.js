@@ -40,11 +40,12 @@ export async function addUserToGroup(userId, groupId) {
     INSERT INTO group_members
     (group_id, user_id)
     VALUES ($1, $2)
+    ON CONFLICT (group_id, user_id) DO NOTHING
     RETURNING *
     `;
   const {
     rows: [member],
-  } = await db.query(sql, [userId, groupId]);
+  } = await db.query(sql, [groupId, userId]);
   return member;
 }
 
@@ -56,6 +57,67 @@ RETURNING *
 `;
   const {
     rows: [member],
-  } = await db.query(sql, [userId, groupId]);
+  } = await db.query(sql, [groupId, userId]);
   return member;
+}
+
+export async function searchGroups(search) {
+  const sql = `
+    SELECT *
+    FROM groups
+    WHERE group_title ILIKE $1
+       OR group_description ILIKE $1
+    ORDER BY created_date DESC
+  `;
+
+  const { rows } = await db.query(sql, [`%${search}%`]);
+  return rows;
+}
+
+//Used ai to help with this query
+export async function getGroupById(groupId, userId = null) {
+  const sql = `
+    SELECT
+      groups.*,
+      COUNT(group_members.user_id)::INT AS member_count,
+      COALESCE(
+        BOOL_OR(group_members.user_id = $2),
+        false
+      ) AS is_member
+    FROM groups
+    LEFT JOIN group_members
+      ON groups.group_id = group_members.group_id
+    WHERE groups.group_id = $1
+    GROUP BY groups.group_id
+  `;
+
+  const {
+    rows: [group],
+  } = await db.query(sql, [groupId, userId]);
+
+  return group;
+}
+
+//Gets all groups created by anyone
+export async function getAllGroups() {
+  const sql = `
+    SELECT *
+    FROM groups
+    ORDER BY created_date DESC
+  `;
+
+  const { rows } = await db.query(sql);
+  return rows;
+}
+
+export async function isUserInGroup(userId, groupId) {
+  const sql = `
+    SELECT 1
+    FROM group_members
+    WHERE user_id = $1 AND group_id = $2
+  `;
+
+  const { rows } = await db.query(sql, [userId, groupId]);
+
+  return rows.length > 0;
 }
