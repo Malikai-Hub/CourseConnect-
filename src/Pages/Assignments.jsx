@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../Auth/AuthContext";
+import "./css/assignments.css";
 
 const API = import.meta.env.VITE_API;
 
@@ -52,77 +53,149 @@ export default function Assignments() {
   );
 
   return (
-    <>
-      <nav>
-        <Link to="/">Home</Link> <Link to="/Groups">Groups</Link>{" "}
+    <div className="assignments-page">
+      <nav className="assignments-nav">
+        <Link to="/">Home</Link>
+        <Link to="/Groups">Groups</Link>
         <Link to="/Profile">Profile</Link>
       </nav>
 
-      <header>
-        <h1>Course Connect</h1>
-        <h2>Assignments</h2>
-      </header>
+      <main className="assignments-content">
+        <header className="assignments-header">
+          <p className="assignments-eyebrow">COURSE CONNECT / YOUR WORK</p>
+          <h1>Course Connect</h1>
+          <h2>Assignments</h2>
+          <p className="assignments-subtitle">
+            Stay organized and keep track of your group's work.
+          </p>
+        </header>
 
-      {error && <p>{error}</p>}
+        {error && <p className="assignments-error">{error}</p>}
 
-      {!token && (
-        <p>
-          Please <Link to="/Login">log in</Link> to view assignments.
-        </p>
-      )}
+        {!token && (
+          <p className="assignments-notice">
+            Please <Link to="/Login">log in</Link> to view assignments.
+          </p>
+        )}
 
-      {token && !error && (
-        <>
-          <section>
-            <h3>My Assignments</h3>
-            {activeAssignments.length === 0 ? (
-              <p>No active assignments yet.</p>
-            ) : (
-              activeAssignments.map((assignment) => (
-                <article key={assignment.assignment_id}>
-                  <h4>{assignment.assignment_name}</h4>
-                  <p>{assignment.assignment_description}</p>
-                  <p>Group: {assignment.group_title}</p>
-                  <p>
-                    Due:{" "}
-                    {assignment.due_date
-                      ? new Date(assignment.due_date).toLocaleDateString()
-                      : "No due date"}
-                  </p>
-                </article>
-              ))
-            )}
-          </section>
+        {token && !error && (
+          <div className="assignments-sections">
+            <section className="assignments-section">
+              <div className="assignments-section-heading">
+                <span className="assignments-icon assignments-icon-purple">
+                  📚
+                </span>
+                <div>
+                  <h3>My Assignments</h3>
+                  <p>Your active assignments across your groups.</p>
+                </div>
+                <span className="assignments-count">
+                  {activeAssignments.length}
+                </span>
+              </div>
 
-          <section>
-            <h3>Created by Me</h3>
-            {myAssignments.length === 0 ? (
-              <p>You haven't created any assignments yet.</p>
-            ) : (
-              myAssignments.map((assignment) => (
-                <p key={assignment.assignment_id}>
-                  {assignment.assignment_name} — {assignment.group_title}
+              {activeAssignments.length === 0 ? (
+                <p className="assignments-empty">No active assignments yet.</p>
+              ) : (
+                <div className="assignments-list">
+                  {activeAssignments.map((assignment) => (
+                    <article
+                      className="assignment-card"
+                      key={assignment.assignment_id}
+                    >
+                      <h4>{assignment.assignment_name}</h4>
+                      <p>{assignment.assignment_description}</p>
+                      <p className="assignment-group">
+                        <strong>Group:</strong> {assignment.group_title}
+                      </p>
+                      <p className="assignment-due">
+                        <strong>Due:</strong>{" "}
+                        {assignment.due_date
+                          ? new Date(assignment.due_date).toLocaleDateString()
+                          : "No due date"}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            <section className="assignments-section">
+              <div className="assignments-section-heading">
+                <span className="assignments-icon assignments-icon-green">
+                  ✏️
+                </span>
+                <div>
+                  <h3>Created by Me</h3>
+                  <p>Assignments you've created for your groups.</p>
+                </div>
+                <span className="assignments-count">
+                  {myAssignments.length}
+                </span>
+              </div>
+
+              {myAssignments.length === 0 ? (
+                <p className="assignments-empty">
+                  You haven't created any assignments yet.
                 </p>
-              ))
-            )}
-          </section>
+              ) : (
+                <div className="assignments-list">
+                  {myAssignments.map((assignment) => (
+                    <article
+                      className="assignment-card assignment-card-compact"
+                      key={assignment.assignment_id}
+                    >
+                      <h4>{assignment.assignment_name}</h4>
+                      <p className="assignment-group">
+                        <strong>Group:</strong> {assignment.group_title}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
 
-          <section>
-            <h3>Completed Assignments</h3>
-            {completedAssignments.length === 0 ? (
-              <p>No completed assignments yet.</p>
-            ) : (
-              completedAssignments.map((assignment) => (
-                <p key={assignment.assignment_id}>
-                  {assignment.assignment_name} — {assignment.group_title}
+            <section className="assignments-section">
+              <div className="assignments-section-heading">
+                <span className="assignments-icon assignments-icon-blue">
+                  ✓
+                </span>
+                <div>
+                  <h3>Completed Assignments</h3>
+                  <p>Look back at the work you've finished.</p>
+                </div>
+                <span className="assignments-count">
+                  {completedAssignments.length}
+                </span>
+              </div>
+
+              {completedAssignments.length === 0 ? (
+                <p className="assignments-empty">
+                  No completed assignments yet.
                 </p>
-              ))
-            )}
-          </section>
-        </>
-      )}
+              ) : (
+                <div className="assignments-list">
+                  {completedAssignments.map((assignment) => (
+                    <article
+                      className="assignment-card assignment-card-completed"
+                      key={assignment.assignment_id}
+                    >
+                      <h4>{assignment.assignment_name}</h4>
+                      <p className="assignment-group">
+                        <strong>Group:</strong> {assignment.group_title}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
+        )}
+      </main>
 
-      <footer></footer>
-    </>
+      <footer className="assignments-footer">
+        <p>Course Connect · Learn together, achieve together.</p>
+      </footer>
+    </div>
   );
 }

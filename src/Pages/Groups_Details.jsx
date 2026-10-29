@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../Auth/AuthContext";
+import "./css/groupDetails.css";
 
 const API = import.meta.env.VITE_API;
 
@@ -40,6 +41,7 @@ export default function GroupDetails() {
 
     fetchGroup();
   }, [groupId, token]);
+
   useEffect(() => {
     async function getAssignments() {
       try {
@@ -69,6 +71,7 @@ export default function GroupDetails() {
       getAssignments();
     }
   }, [groupId, token]);
+
   async function handleCreateAssignment(e) {
     e.preventDefault();
     setAssignmentError("");
@@ -227,140 +230,192 @@ export default function GroupDetails() {
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p className="group-details-error">{error}</p>;
   }
 
   if (!group) {
-    return <p>Loading group details...</p>;
+    return <p className="group-details-loading">Loading group details...</p>;
   }
 
   return (
-    <>
-      <nav>
+    <div className="group-details-page">
+      <nav className="group-details-nav">
         <Link to="/Groups">Back to Groups</Link>
       </nav>
 
-      <h1>{group.group_title}</h1>
-      <p>{group.group_description}</p>
+      <main className="group-details-content">
+        <header className="group-details-header">
+          <p className="group-details-eyebrow">COURSE CONNECT / STUDY GROUP</p>
+          <h1>{group.group_title}</h1>
+          <p className="group-details-description">{group.group_description}</p>
 
-      <p>Members:{group.member_count}</p>
+          <div className="group-details-meta">
+            <p>
+              <strong>Members:</strong> {group.member_count}
+            </p>
 
-      <p>
-        Created:
-        {new Date(group.created_date).toLocaleDateString()}
-      </p>
+            <p>
+              <strong>Created:</strong>{" "}
+              {new Date(group.created_date).toLocaleDateString()}
+            </p>
+          </div>
 
-      {token ? (
-        group.is_member ? (
-          <button onClick={handleMember}>Leave Group</button>
-        ) : (
-          <button onClick={handleMember}>Join Group</button>
-        )
-      ) : (
-        <p>
-          Please <Link to="/Login">log in</Link> to join this group.
-        </p>
-      )}
-
-      <h2>Assignments</h2>
-
-      {!token ? (
-        <p>Please log in and join this group to see assignments.</p>
-      ) : !group.is_member ? (
-        <p>Join this group to see assignments.</p>
-      ) : (
-        <>
-          <form onSubmit={handleCreateAssignment}>
-            <input
-              type="text"
-              placeholder="Assignment name"
-              value={assignmentName}
-              onChange={(event) => setAssignmentName(event.target.value)}
-              required
-            />
-
-            <input
-              placeholder="Assignment description"
-              value={assignmentDescription}
-              onChange={(event) => setAssignmentDescription(event.target.value)}
-              required
-            />
-
-            <input
-              placeholder="Due date"
-              type="date"
-              value={dueDate}
-              onChange={(event) => setDueDate(event.target.value)}
-            />
-
-            <button type="submit">Create Assignment</button>
-          </form>
-
-          {assignmentError && <p>{assignmentError}</p>}
-
-          {assignments.length === 0 ? (
-            <p>No assignments for this group yet.</p>
+          {token ? (
+            group.is_member ? (
+              <button className="group-leave-button" onClick={handleMember}>
+                Leave Group
+              </button>
+            ) : (
+              <button className="group-join-button" onClick={handleMember}>
+                Join Group
+              </button>
+            )
           ) : (
-            assignments.map((assignment) => (
-              <div key={assignment.assignment_id}>
-                <h3>{assignment.assignment_name}</h3>
-                <p>{assignment.assignment_description}</p>
-                <p>
-                  Due:{" "}
-                  {assignment.due_date
-                    ? new Date(assignment.due_date).toLocaleDateString()
-                    : "No due date"}
+            <p className="group-login-message">
+              Please <Link to="/Login">log in</Link> to join this group.
+            </p>
+          )}
+        </header>
+
+        <section className="group-details-section">
+          <div className="group-section-heading">
+            <h2>Assignments</h2>
+            <p>Keep track of your group's upcoming work.</p>
+          </div>
+
+          {!token ? (
+            <p className="group-notice">
+              Please log in and join this group to see assignments.
+            </p>
+          ) : !group.is_member ? (
+            <p className="group-notice">Join this group to see assignments.</p>
+          ) : (
+            <>
+              <form className="group-form" onSubmit={handleCreateAssignment}>
+                <input
+                  type="text"
+                  placeholder="Assignment name"
+                  value={assignmentName}
+                  onChange={(event) => setAssignmentName(event.target.value)}
+                  required
+                />
+
+                <input
+                  placeholder="Assignment description"
+                  value={assignmentDescription}
+                  onChange={(event) =>
+                    setAssignmentDescription(event.target.value)
+                  }
+                  required
+                />
+
+                <label className="group-input-label">
+                  Due date
+                  <input
+                    type="date"
+                    value={dueDate}
+                    onChange={(event) => setDueDate(event.target.value)}
+                  />
+                </label>
+
+                <button type="submit" className="group-primary-button">
+                  Create Assignment
+                </button>
+              </form>
+
+              {assignmentError && (
+                <p className="group-error-message">{assignmentError}</p>
+              )}
+
+              {assignments.length === 0 ? (
+                <p className="group-empty-message">
+                  No assignments for this group yet.
                 </p>
-              </div>
-            ))
+              ) : (
+                <div className="group-item-grid">
+                  {assignments.map((assignment) => (
+                    <div
+                      className="group-item-card"
+                      key={assignment.assignment_id}
+                    >
+                      <h3>{assignment.assignment_name}</h3>
+                      <p>{assignment.assignment_description}</p>
+                      <p className="group-item-date">
+                        <strong>Due:</strong>{" "}
+                        {assignment.due_date
+                          ? new Date(assignment.due_date).toLocaleDateString()
+                          : "No due date"}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
           )}
-        </>
-      )}
+        </section>
 
-      <h2>Group Posts</h2>
+        <section className="group-details-section">
+          <div className="group-section-heading">
+            <h2>Group Posts</h2>
+            <p>Share notes and start a conversation with your group.</p>
+          </div>
 
-      {!token ? (
-        <p>Please log in to view group posts.</p>
-      ) : !group.is_member ? (
-        <p>Join this group to view and create posts.</p>
-      ) : (
-        <>
-          {postError && <p>{postError}</p>}
-
-          <form onSubmit={handleCreatePost}>
-            <input
-              type="text"
-              placeholder="Post title..."
-              value={postTitle}
-              onChange={(event) => setPostTitle(event.target.value)}
-              required
-            />
-
-            <input
-              placeholder="Message..."
-              value={postNotes}
-              onChange={(event) => setPostNotes(event.target.value)}
-              required
-            />
-
-            <button type="submit">Create Post</button>
-          </form>
-
-          {posts.length === 0 ? (
-            <p>No posts yet. Start the conversation!</p>
+          {!token ? (
+            <p className="group-notice">Please log in to view group posts.</p>
+          ) : !group.is_member ? (
+            <p className="group-notice">
+              Join this group to view and create posts.
+            </p>
           ) : (
-            posts.map((post) => (
-              <div key={post.post_id}>
-                <h3>{post.post_title}</h3>
-                <p>{post.notes}</p>
-                <p>Posted by: {post.username}</p>
-                <p>{new Date(post.created_at).toLocaleString()}</p>
-              </div>
-            ))
+            <>
+              {postError && <p className="group-error-message">{postError}</p>}
+
+              <form className="group-form" onSubmit={handleCreatePost}>
+                <input
+                  type="text"
+                  placeholder="Post title..."
+                  value={postTitle}
+                  onChange={(event) => setPostTitle(event.target.value)}
+                  required
+                />
+
+                <input
+                  placeholder="Message..."
+                  value={postNotes}
+                  onChange={(event) => setPostNotes(event.target.value)}
+                  required
+                />
+
+                <button type="submit" className="group-primary-button">
+                  Create Post
+                </button>
+              </form>
+
+              {posts.length === 0 ? (
+                <p className="group-empty-message">
+                  No posts yet. Start the conversation!
+                </p>
+              ) : (
+                <div className="group-post-list">
+                  {posts.map((post) => (
+                    <div className="group-post-card" key={post.post_id}>
+                      <h3>{post.post_title}</h3>
+                      <p>{post.notes}</p>
+                      <p className="group-post-author">
+                        Posted by: {post.username}
+                      </p>
+                      <p className="group-item-date">
+                        {new Date(post.created_at).toLocaleString()}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
           )}
-        </>
-      )}
-    </>
+        </section>
+      </main>
+    </div>
   );
 }
 //added extra functions for better accessability for the user

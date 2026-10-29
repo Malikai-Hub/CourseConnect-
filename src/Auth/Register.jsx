@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "./AuthContext";
+import "../Pages/css/Login.css";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -22,30 +23,35 @@ export default function Register() {
   };
   return (
     <>
-      <h1>Start learning</h1>
-      <form onSubmit={onRegister}>
-        <label>
-          Username
-          <input type="text" name="username" required />
-        </label>
-        <label>
-          Email
-          <input type="email" name="email" required />
-        </label>
-        <label>
-          Password
-          <input type="password" name="password" required />
-        </label>
+      <Link to="/" className="login-home-link">
+        🏠 Home
+      </Link>
+      <main className="login-page">
+        <h1 className="login-heading">Start learning</h1>
+        <form className="login-form" onSubmit={onRegister}>
+          <label className="login-label">
+            Username
+            <input type="text" name="username" required />
+          </label>
+          <label className="login-label">
+            Email
+            <input type="email" name="email" required />
+          </label>
+          <label className="login-label">
+            Password
+            <input type="password" name="password" required />
+          </label>
 
-        <button>Sign up</button>
-        <footer>
-          <p>
-            Already have an account? Continue learning
-            <Link to="/Login">here.</Link>
-          </p>
-        </footer>
-        {error && <p>{error}</p>}
-      </form>
+          <button className="login-button">Sign up</button>
+          <footer className="login-footer">
+            <p>
+              Already have an account? Continue learning
+              <Link to="/Login"> here.</Link>
+            </p>
+          </footer>
+          {error && <p className="login-error">{error}</p>}
+        </form>
+      </main>
     </>
   );
 }
