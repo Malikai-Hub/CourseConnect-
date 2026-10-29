@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../Auth/AuthContext";
+import { useAuth } from "../Auth/authContext";
 import "./css/assignments.css";
 
 const API = import.meta.env.VITE_API;
@@ -13,6 +13,8 @@ export default function Assignments() {
   useEffect(() => {
     async function getAssignments() {
       try {
+        setError("");
+
         const response = await fetch(`${API}/assignments`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -35,6 +37,7 @@ export default function Assignments() {
       getAssignments();
     } else {
       setAssignments([]);
+      setError("");
     }
   }, [token]);
 
@@ -54,148 +57,238 @@ export default function Assignments() {
 
   return (
     <div className="assignments-page">
-      <nav className="assignments-nav">
-        <Link to="/">Home</Link>
-        <Link to="/Groups">Groups</Link>
-        <Link to="/Profile">Profile</Link>
-      </nav>
+      {/* SIDEBAR */}
+      <aside className="assignments-sidebar">
+        <Link to="/" className="assignments-brand">
+          🎓 Course Connect
+        </Link>
 
-      <main className="assignments-content">
+        <p className="assignments-menu-label">MENU</p>
+
+        <nav className="assignments-nav">
+          <Link to="/">🏠 Dashboard</Link>
+          <Link to="/Study">📚 Study</Link>
+          <Link to="/Groups">👥 Groups</Link>
+          <Link to="/Assignments" className="selected">
+            📝 Assignments
+          </Link>
+          <Link to="/Profile">👤 Profile</Link>
+        </nav>
+      </aside>
+
+      {/* MAIN CONTENT */}
+      <main className="assignments-main">
         <header className="assignments-header">
-          <p className="assignments-eyebrow">COURSE CONNECT / YOUR WORK</p>
-          <h1>Course Connect</h1>
-          <h2>Assignments</h2>
-          <p className="assignments-subtitle">
-            Stay organized and keep track of your group's work.
-          </p>
+          <div>
+            <p className="assignments-eyebrow">COURSE CONNECT / YOUR WORK</p>
+            <h1>Assignments</h1>
+            <p>
+              Stay organized, keep track of deadlines, and celebrate your
+              progress.
+            </p>
+          </div>
+
+          <Link to="/" className="assignments-home-button">
+            ← Back Home
+          </Link>
         </header>
 
-        {error && <p className="assignments-error">{error}</p>}
+        {/* WELCOME BANNER */}
+        <section className="assignments-welcome">
+          <h2>One step at a time.</h2>
+          <p>
+            Every assignment is an opportunity to learn something new. Keep
+            track of your group's work and make progress toward your goals.
+          </p>
+        </section>
 
-        {!token && (
-          <p className="assignments-notice">
-            Please <Link to="/Login">log in</Link> to view assignments.
+        {error && (
+          <p className="assignments-error" role="alert">
+            {error}
           </p>
         )}
 
+        {!token && (
+          <p className="assignments-notice">
+            Please <Link to="/Login">log in</Link> to view your assignments.
+          </p>
+        )}
+
+        {/* ASSIGNMENT SECTIONS */}
         {token && !error && (
-          <div className="assignments-sections">
-            <section className="assignments-section">
-              <div className="assignments-section-heading">
-                <span className="assignments-icon assignments-icon-purple">
-                  📚
-                </span>
+          <>
+            {/* ACTIVE ASSIGNMENTS */}
+            <section className="assignment-section">
+              <div className="assignment-section-heading">
                 <div>
-                  <h3>My Assignments</h3>
+                  <h2>My Assignments</h2>
                   <p>Your active assignments across your groups.</p>
                 </div>
-                <span className="assignments-count">
-                  {activeAssignments.length}
-                </span>
+
+                <div className="assignment-heading-actions">
+                  <span className="assignment-count">
+                    {activeAssignments.length} active
+                  </span>
+                </div>
               </div>
 
               {activeAssignments.length === 0 ? (
-                <p className="assignments-empty">No active assignments yet.</p>
+                <div className="assignment-empty">
+                  <span>📚</span>
+                  <h3>You're all caught up!</h3>
+                  <p>
+                    You don't have any active assignments right now. Check your
+                    groups for new work.
+                  </p>
+                  <Link to="/Groups">Explore your groups →</Link>
+                </div>
               ) : (
-                <div className="assignments-list">
+                <div className="assignment-list">
                   {activeAssignments.map((assignment) => (
                     <article
                       className="assignment-card"
                       key={assignment.assignment_id}
                     >
-                      <h4>{assignment.assignment_name}</h4>
-                      <p>{assignment.assignment_description}</p>
-                      <p className="assignment-group">
-                        <strong>Group:</strong> {assignment.group_title}
-                      </p>
-                      <p className="assignment-due">
-                        <strong>Due:</strong>{" "}
-                        {assignment.due_date
-                          ? new Date(assignment.due_date).toLocaleDateString()
-                          : "No due date"}
-                      </p>
+                      <span className="assignment-card-icon">📝</span>
+
+                      <div className="assignment-details">
+                        <h3>{assignment.assignment_name}</h3>
+
+                        <p>{assignment.assignment_description}</p>
+
+                        <p>
+                          <strong>Group:</strong> {assignment.group_title}
+                        </p>
+
+                        <p className="assignment-due">
+                          <strong>Due:</strong>{" "}
+                          {assignment.due_date
+                            ? new Date(assignment.due_date).toLocaleDateString()
+                            : "No due date"}
+                        </p>
+                      </div>
+
+                      <span className="assignment-status">In progress</span>
                     </article>
                   ))}
                 </div>
               )}
             </section>
 
-            <section className="assignments-section">
-              <div className="assignments-section-heading">
-                <span className="assignments-icon assignments-icon-green">
-                  ✏️
-                </span>
+            {/* ASSIGNMENTS CREATED BY THE USER */}
+            <section className="assignment-section">
+              <div className="assignment-section-heading">
                 <div>
-                  <h3>Created by Me</h3>
+                  <h2>Created by Me</h2>
                   <p>Assignments you've created for your groups.</p>
                 </div>
-                <span className="assignments-count">
-                  {myAssignments.length}
-                </span>
+
+                <div className="assignment-heading-actions">
+                  <span className="assignment-count">
+                    {myAssignments.length} created
+                  </span>
+                </div>
               </div>
 
               {myAssignments.length === 0 ? (
-                <p className="assignments-empty">
-                  You haven't created any assignments yet.
-                </p>
+                <div className="assignment-empty">
+                  <span>✏️</span>
+                  <h3>No assignments created yet</h3>
+                  <p>
+                    When you create assignments for your groups, they'll appear
+                    here.
+                  </p>
+                  <Link to="/Groups">Visit your groups →</Link>
+                </div>
               ) : (
-                <div className="assignments-list">
+                <div className="assignment-list">
                   {myAssignments.map((assignment) => (
                     <article
-                      className="assignment-card assignment-card-compact"
+                      className="assignment-card"
                       key={assignment.assignment_id}
                     >
-                      <h4>{assignment.assignment_name}</h4>
-                      <p className="assignment-group">
-                        <strong>Group:</strong> {assignment.group_title}
-                      </p>
+                      <span className="assignment-card-icon">✏️</span>
+
+                      <div className="assignment-details">
+                        <h3>{assignment.assignment_name}</h3>
+
+                        <p>
+                          <strong>Group:</strong> {assignment.group_title}
+                        </p>
+
+                        <p className="assignment-due">
+                          <strong>Due:</strong>{" "}
+                          {assignment.due_date
+                            ? new Date(assignment.due_date).toLocaleDateString()
+                            : "No due date"}
+                        </p>
+                      </div>
+
+                      <span className="assignment-status">
+                        {assignment.is_complete ? "Completed" : "In progress"}
+                      </span>
                     </article>
                   ))}
                 </div>
               )}
             </section>
 
-            <section className="assignments-section">
-              <div className="assignments-section-heading">
-                <span className="assignments-icon assignments-icon-blue">
-                  ✓
-                </span>
+            {/* COMPLETED ASSIGNMENTS */}
+            <section className="assignment-section">
+              <div className="assignment-section-heading">
                 <div>
-                  <h3>Completed Assignments</h3>
+                  <h2>Completed Assignments</h2>
                   <p>Look back at the work you've finished.</p>
                 </div>
-                <span className="assignments-count">
-                  {completedAssignments.length}
-                </span>
+
+                <div className="assignment-heading-actions">
+                  <span className="assignment-count">
+                    {completedAssignments.length} completed
+                  </span>
+                </div>
               </div>
 
               {completedAssignments.length === 0 ? (
-                <p className="assignments-empty">
-                  No completed assignments yet.
-                </p>
+                <div className="assignment-empty">
+                  <span>✓</span>
+                  <h3>Your achievements start here</h3>
+                  <p>
+                    Completed assignments will appear here when their status is
+                    marked as complete.
+                  </p>
+                </div>
               ) : (
-                <div className="assignments-list">
+                <div className="assignment-list">
                   {completedAssignments.map((assignment) => (
                     <article
-                      className="assignment-card assignment-card-completed"
+                      className="assignment-card"
                       key={assignment.assignment_id}
                     >
-                      <h4>{assignment.assignment_name}</h4>
-                      <p className="assignment-group">
-                        <strong>Group:</strong> {assignment.group_title}
-                      </p>
+                      <span className="assignment-card-icon">✅</span>
+
+                      <div className="assignment-details">
+                        <h3>{assignment.assignment_name}</h3>
+
+                        <p>
+                          <strong>Group:</strong> {assignment.group_title}
+                        </p>
+
+                        <p>{assignment.assignment_description}</p>
+                      </div>
+
+                      <span className="assignment-status">Completed</span>
                     </article>
                   ))}
                 </div>
               )}
             </section>
-          </div>
+          </>
         )}
-      </main>
 
-      <footer className="assignments-footer">
-        <p>Course Connect · Learn together, achieve together.</p>
-      </footer>
+        <footer className="assignments-footer">
+          <p>Course Connect · Learn together, achieve together.</p>
+        </footer>
+      </main>
     </div>
   );
 }

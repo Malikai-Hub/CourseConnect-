@@ -1,0 +1,517 @@
+* {
+  box-sizing: border-box;
+}
+
+.register-page {
+  --register-ink: #17132f;
+  --register-ink-soft: #625b7c;
+  --register-purple: #7c3aed;
+  --register-purple-dark: #6327d5;
+  --register-lavender: #eee7ff;
+  --register-orange: #ff8a3d;
+  --register-cream: #fffaf2;
+  --register-white: #ffffff;
+  --register-border: #e9e2f1;
+
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color: var(--register-ink);
+  background:
+    radial-gradient(
+      circle at 10% 35%,
+      rgba(255, 209, 173, 0.24),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 75%,
+      rgba(196, 181, 253, 0.28),
+      transparent 30%
+    ),
+    var(--register-cream);
+  font-family: inherit;
+}
+
+/* Navigation */
+
+.register-nav {
+  width: 100%;
+  min-height: 82px;
+  padding: 18px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+  background: rgba(255, 250, 242, 0.82);
+}
+
+.register-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--register-ink);
+  text-decoration: none;
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.register-logo-mark {
+  width: 39px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  background: var(--register-lavender);
+  font-size: 1.25rem;
+  letter-spacing: -0.12em;
+}
+
+.register-logo-purple {
+  color: var(--register-purple);
+}
+
+.register-logo-orange {
+  color: var(--register-orange);
+}
+
+.register-home-link {
+  padding: 10px 17px;
+  border: 1px solid var(--register-border);
+  border-radius: 999px;
+  color: var(--register-ink);
+  background: var(--register-white);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.register-home-link:hover {
+  color: var(--register-purple);
+  border-color: var(--register-purple);
+  transform: translateY(-2px);
+}
+
+/* Main layout */
+
+.register-content {
+  position: relative;
+  isolation: isolate;
+  width: min(1120px, 88%);
+  margin: auto;
+  padding: 65px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(350px, 440px);
+  align-items: center;
+  gap: clamp(40px, 7vw, 100px);
+}
+
+.register-intro {
+  position: relative;
+  z-index: 1;
+  max-width: 540px;
+}
+
+.register-eyebrow {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--register-purple);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.register-intro h1 {
+  margin: 0;
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  line-height: 1.06;
+  letter-spacing: -0.065em;
+  font-weight: 850;
+}
+
+.register-intro h1 span {
+  display: block;
+  color: var(--register-purple);
+}
+
+.register-intro > p {
+  max-width: 440px;
+  margin: 24px 0 30px;
+  color: var(--register-ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.register-benefits {
+  display: grid;
+  gap: 15px;
+}
+
+.register-benefit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--register-ink);
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.register-benefit-icon {
+  width: 31px;
+  height: 31px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: var(--register-purple);
+  background: var(--register-lavender);
+  font-size: 1rem;
+}
+
+.register-benefit:nth-child(2) .register-benefit-icon {
+  color: #b85a17;
+  background: #fff0df;
+}
+
+.register-benefit:nth-child(3) .register-benefit-icon {
+  color: #bd4d70;
+  background: #ffedf2;
+}
+
+/* Decorative shapes */
+
+.register-decoration {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.register-decoration-one {
+  top: 3%;
+  left: 35%;
+  width: 95px;
+  height: 95px;
+  border: 18px solid rgba(255, 138, 61, 0.16);
+}
+
+.register-decoration-two {
+  right: -2%;
+  bottom: 3%;
+  width: 135px;
+  height: 135px;
+  background: rgba(196, 181, 253, 0.2);
+}
+
+/* Registration card */
+
+.register-card {
+  position: relative;
+  z-index: 1;
+  padding: 38px;
+  border: 1px solid rgba(124, 58, 237, 0.12);
+  border-radius: 28px;
+  background: var(--register-white);
+  box-shadow:
+    0 24px 70px rgba(45, 25, 83, 0.09),
+    0 4px 12px rgba(45, 25, 83, 0.035);
+}
+
+.register-card-heading {
+  text-align: center;
+}
+
+.register-card-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 17px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  color: var(--register-purple);
+  background: var(--register-lavender);
+  font-size: 1.35rem;
+}
+
+.register-card-eyebrow {
+  margin: 0 0 9px;
+  color: var(--register-orange);
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+}
+
+.register-card-heading h2 {
+  margin: 0;
+  color: var(--register-ink);
+  font-size: 1.85rem;
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+}
+
+.register-card-description {
+  margin: 12px 0 28px;
+  color: var(--register-ink-soft);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Form fields */
+
+.register-form {
+  display: grid;
+  gap: 18px;
+}
+
+.register-label {
+  display: grid;
+  gap: 8px;
+  color: var(--register-ink);
+  font-size: 0.87rem;
+  font-weight: 750;
+}
+
+.register-label input {
+  width: 100%;
+  min-height: 49px;
+  padding: 13px 15px;
+  border: 1px solid var(--register-border);
+  border-radius: 12px;
+  outline: none;
+  color: var(--register-ink);
+  background: #fdfbff;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 450;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.register-label input::placeholder {
+  color: #a29ab3;
+}
+
+.register-label input:hover {
+  border-color: #c9b5f5;
+}
+
+.register-label input:focus {
+  border-color: var(--register-purple);
+  background: var(--register-white);
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.11);
+}
+
+.register-button {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 3px;
+  padding: 13px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: none;
+  border-radius: 13px;
+  color: var(--register-white);
+  background: var(--register-purple);
+  box-shadow: 0 8px 18px rgba(124, 58, 237, 0.2);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.register-button span {
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.register-button:hover {
+  background: var(--register-purple-dark);
+  box-shadow: 0 11px 23px rgba(124, 58, 237, 0.27);
+  transform: translateY(-2px);
+}
+
+.register-button:hover span {
+  transform: translateX(4px);
+}
+
+.register-button:focus-visible,
+.register-home-link:focus-visible,
+.register-footer a:focus-visible {
+  outline: 3px solid rgba(255, 138, 61, 0.65);
+  outline-offset: 3px;
+}
+
+.register-error {
+  margin: 0;
+  padding: 11px 13px;
+  border: 1px solid #f4b9bd;
+  border-radius: 10px;
+  color: #a21c35;
+  background: #fff1f2;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Footer inside the card */
+
+.register-divider {
+  margin: 26px 0 17px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #9a92aa;
+  font-size: 0.61rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-align: center;
+}
+
+.register-divider::before,
+.register-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: var(--register-border);
+}
+
+.register-footer {
+  margin: 0;
+  color: var(--register-ink-soft);
+  font-size: 0.86rem;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.register-footer a {
+  color: var(--register-purple);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.register-footer a:hover {
+  color: var(--register-purple-dark);
+  text-decoration: underline;
+}
+
+/* Page footer */
+
+.register-page-footer {
+  padding: 20px;
+  color: var(--register-ink-soft);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+/* Responsive layout */
+
+@media (max-width: 850px) {
+  .register-content {
+    width: min(560px, 90%);
+    padding: 55px 0;
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .register-intro {
+    max-width: 560px;
+    text-align: center;
+  }
+
+  .register-intro h1 {
+    font-size: clamp(2.5rem, 7vw, 3.6rem);
+  }
+
+  .register-intro > p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .register-benefits {
+    width: fit-content;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .register-decoration-one {
+    left: 5%;
+  }
+
+  .register-decoration-two {
+    right: -5%;
+    bottom: 30%;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-nav {
+    min-height: 72px;
+    padding: 15px 5%;
+  }
+
+  .register-logo {
+    gap: 8px;
+    font-size: 0.98rem;
+  }
+
+  .register-logo-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+  }
+
+  .register-home-link {
+    padding: 9px 12px;
+    font-size: 0.82rem;
+  }
+
+  .register-content {
+    width: 91%;
+    padding: 40px 0;
+    gap: 30px;
+  }
+
+  .register-eyebrow {
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+  }
+
+  .register-intro h1 {
+    font-size: 2.55rem;
+  }
+
+  .register-intro > p {
+    font-size: 0.95rem;
+  }
+
+  .register-benefit {
+    font-size: 0.86rem;
+  }
+
+  .register-card {
+    padding: 27px 21px;
+    border-radius: 23px;
+  }
+
+  .register-card-heading h2 {
+    font-size: 1.6rem;
+  }
+
+  .register-divider {
+    font-size: 0.55rem;
+  }
+}

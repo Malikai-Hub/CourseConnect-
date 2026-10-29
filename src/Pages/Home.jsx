@@ -1,112 +1,249 @@
 import { Link } from "react-router-dom";
-import "./Home.css";
+import "./css/Home.css";
 
 export default function Home() {
   return (
-    <div className="dashboard">
-      <aside className="sidebar">
-        <div className="brand">
-          <span className="brand-icon">🎓</span>
-          <h2>Course Connect</h2>
-        </div>
+    <div className="home-page">
+      {/* TOP NAVIGATION */}
+      <header className="topbar">
+        <Link to="/" className="logo">
+          <span className="cc-logo" aria-hidden="true">
+            <span className="cc-shape cc-blue"></span>
+            <span className="cc-shape cc-coral"></span>
+          </span>
 
-        <p className="menu-label">MENU</p>
+          <span className="logo-text">
+            Course <strong>Connect</strong>
+          </span>
+        </Link>
 
-        <nav className="sidebar-nav">
-          <Link to="/" className="nav-link active">
-            🏠 Dashboard
+        <nav className="top-nav">
+          <Link to="/" className="top-nav-link active">
+            Home
           </Link>
-          <Link to="#" className="nav-link">
-            📚 Study
+          <Link to="#" className="top-nav-link">
+            Study
           </Link>
-          <Link to="/Groups" className="nav-link">
-            👥 Groups
+          <Link to="/Groups" className="top-nav-link">
+            Groups
           </Link>
-          <Link to="/Assignments" className="nav-link">
-            📝 Assignments
-          </Link>
-          <Link to="/Profile" className="nav-link">
-            👤 Profile
+          <Link to="/Assignments" className="top-nav-link">
+            Assignments
           </Link>
         </nav>
 
-        <div className="sidebar-bottom">
-          <p>Ready to learn something new?</p>
-          <Link to="/Study" className="study-button">
-            Start studying →
+        <div className="nav-actions">
+          <Link
+            to="/Profile"
+            className="profile-circle"
+            aria-label="My profile"
+          >
+            👤
           </Link>
         </div>
-      </aside>
+      </header>
 
-      <main className="dashboard-main">
-        <header className="dashboard-header">
-          <div>
-            <p className="eyebrow">YOUR LEARNING SPACE</p>
-            <h1>Welcome to Course Connect!</h1>
-            <p className="subtitle">
-              Stay organized, study smarter, and learn together.
+      <main className="home-main">
+        {/* HERO SECTION */}
+        <section className="hero">
+          <div className="hero-content">
+            <p className="hero-eyebrow">YOUR LEARNING SPACE</p>
+
+            <h1>
+              Learn better.
+              <span> Together.</span>
+            </h1>
+
+            <p className="hero-description">
+              Stay organized, connect with classmates, and make every study
+              session count.
             </p>
-          </div>
-          <Link to="/Profile" className="profile-button">
-            My Profile →
-          </Link>
-        </header>
 
-        <section className="welcome-card">
-          <div>
-            <p className="welcome-label">YOUR JOURNEY STARTS HERE</p>
-            <h2>Small steps lead to big achievements.</h2>
-            <p>Make today a great day to learn something new.</p>
-            <Link to="/Study" className="primary-button">
-              Explore Study Tools →
-            </Link>
-          </div>
-          <div className="welcome-emoji" aria-hidden="true">
-            📖
-          </div>
-        </section>
+            <div className="hero-actions">
+              <Link to="/Groups" className="button button-dark">
+                Explore study groups →
+              </Link>
 
-        <section className="dashboard-section">
-          <div className="section-heading">
-            <div>
-              <h2>Your Learning Hub</h2>
-              <p>Quick access to your study activities.</p>
+              <Link to="/Study" className="button button-light">
+                Start studying
+              </Link>
             </div>
           </div>
 
-          <div className="feature-grid">
-            <Link to="/Assignments" className="feature-card">
-              <span className="feature-icon purple">📝</span>
-              <h3>Upcoming Tasks</h3>
-              <p>Keep track of your assignments and deadlines.</p>
-              <span className="card-link">View assignments →</span>
-            </Link>
+          <div className="hero-note" aria-hidden="true">
+            <span className="note-arrow">↗</span>
+            <p>Small steps,</p>
+            <p>big achievements!</p>
+          </div>
+        </section>
 
-            <Link to="/Groups" className="feature-card">
-              <span className="feature-icon green">👥</span>
-              <h3>Study Sessions</h3>
-              <p>Connect with classmates and learn together.</p>
-              <span className="card-link">Explore groups →</span>
-            </Link>
+        {/* QUICK ACTIONS */}
+        <section className="quick-actions">
+          <Link to="/Groups" className="quick-card">
+            <span className="quick-icon icon-blue">👥</span>
+            <span>
+              <strong>Study Groups</strong>
+              <small>Learn with classmates</small>
+            </span>
+            <span className="quick-arrow">→</span>
+          </Link>
 
-            <Link to="/Study" className="feature-card">
-              <span className="feature-icon orange">💡</span>
-              <h3>Recent Study Sets</h3>
-              <p>Find study materials and review what you've learned.</p>
-              <span className="card-link">Start reviewing →</span>
-            </Link>
+          <Link to="/Assignments" className="quick-card">
+            <span className="quick-icon icon-coral">📝</span>
+            <span>
+              <strong>Assignments</strong>
+              <small>Stay on top of deadlines</small>
+            </span>
+            <span className="quick-arrow">→</span>
+          </Link>
 
-            <Link to="/Groups" className="feature-card">
-              <span className="feature-icon blue">💬</span>
-              <h3>Recent Post Replies</h3>
-              <p>Continue conversations with your study community.</p>
-              <span className="card-link">Visit groups →</span>
+          <Link to="/Study" className="quick-card">
+            <span className="quick-icon icon-green">💡</span>
+            <span>
+              <strong>Study Tools</strong>
+              <small>Build your knowledge</small>
+            </span>
+            <span className="quick-arrow">→</span>
+          </Link>
+
+          <Link to="/Profile" className="quick-card">
+            <span className="quick-icon icon-purple">👤</span>
+            <span>
+              <strong>My Profile</strong>
+              <small>View your account</small>
+            </span>
+            <span className="quick-arrow">→</span>
+          </Link>
+        </section>
+
+        {/* DASHBOARD CARDS */}
+        <section className="dashboard-grid">
+          <div className="dashboard-card">
+            <div className="card-heading">
+              <div>
+                <p className="card-kicker">STAY ORGANIZED</p>
+                <h2>Upcoming Tasks</h2>
+              </div>
+
+              <Link to="/Assignments">View all →</Link>
+            </div>
+
+            <div className="empty-state">
+              <span className="empty-icon icon-coral">📝</span>
+              <div>
+                <h3>Ready to get things done?</h3>
+                <p>
+                  Visit your assignments to review your tasks and deadlines.
+                </p>
+              </div>
+            </div>
+
+            <Link to="/Assignments" className="button button-dark">
+              View assignments →
+            </Link>
+          </div>
+
+          <div className="dashboard-card continue-card">
+            <div className="card-heading">
+              <div>
+                <p className="card-kicker">KEEP LEARNING</p>
+                <h2>Continue Studying</h2>
+              </div>
+            </div>
+
+            <div className="study-preview">
+              <span className="study-preview-icon">📖</span>
+              <div>
+                <h3>Your next study session</h3>
+                <p>
+                  Take a moment to review material and strengthen your
+                  understanding.
+                </p>
+              </div>
+
+              <Link
+                to="/Study"
+                className="play-button"
+                aria-label="Start studying"
+              >
+                →
+              </Link>
+            </div>
+          </div>
+
+          <div className="dashboard-card">
+            <div className="card-heading">
+              <div>
+                <p className="card-kicker">LEARN TOGETHER</p>
+                <h2>Your Study Community</h2>
+              </div>
+
+              <Link to="/Groups">Explore →</Link>
+            </div>
+
+            <div className="empty-state">
+              <span className="empty-icon icon-blue">👥</span>
+              <div>
+                <h3>Learning is better together</h3>
+                <p>
+                  Find a group, share ideas, and connect with other students.
+                </p>
+              </div>
+            </div>
+
+            <Link to="/Groups" className="button button-light">
+              Explore groups →
             </Link>
           </div>
         </section>
 
-        <footer className="dashboard-footer">
-          <p>Course Connect · Learn together, grow together.</p>
+        {/* BOTTOM SECTION */}
+        <section className="bottom-grid">
+          <div className="activity-card">
+            <div className="card-heading">
+              <div>
+                <p className="card-kicker">YOUR PROGRESS</p>
+                <h2>Recent Activity</h2>
+              </div>
+            </div>
+
+            <div className="activity-empty">
+              <span className="activity-dot"></span>
+              <div>
+                <h3>Your learning journey starts here</h3>
+                <p>
+                  Explore groups, work on assignments, and make progress toward
+                  your goals.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="promo-card">
+            <div className="promo-content">
+              <p>YOUR NEXT CHAPTER</p>
+              <h2>
+                Make time
+                <br />
+                to grow.
+              </h2>
+              <span>
+                Every study session is another step toward your goals.
+              </span>
+            </div>
+
+            <Link to="/Study" className="promo-button">
+              Start learning →
+            </Link>
+          </div>
+        </section>
+
+        {/* FOOTER */}
+        <footer className="home-footer">
+          <p>
+            <span>Course Connect</span> · Learn together, grow together.
+          </p>
+          <p>Keep showing up for yourself.</p>
         </footer>
       </main>
     </div>
