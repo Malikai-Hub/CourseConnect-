@@ -16,7 +16,18 @@ export async function createPost(groupId, userId, postTitle, notes) {
     rows: [post],
   } = await db.query(sql, [groupId, userId, postTitle, notes]);
 
-  return post;
+  const usernameSql = `
+    SELECT posts.*, users.username
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    WHERE posts.post_id = $1
+  `;
+
+  const {
+    rows: [newPost],
+  } = await db.query(usernameSql, [post.post_id]);
+
+  return newPost;
 }
 
 export async function getPosts() {
