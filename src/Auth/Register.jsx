@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./authContext";
 import "../Pages/css/Register.css";
 
@@ -17,10 +17,13 @@ export default function Register() {
     const password = formData.get("password");
 
     try {
+      setError("");
       await register({ username, email, password });
       navigate("/");
-    } catch (e) {
-      setError("Unable to create your account. Please try again.");
+    } catch {
+      setError(
+        "Unable to create your account. Please check your information and try again.",
+      );
     }
   };
 
@@ -48,10 +51,12 @@ export default function Register() {
           <span className="register-eyebrow">
             YOUR NEXT CHAPTER STARTS HERE
           </span>
+
           <h1>
             Start learning.
             <span> Grow together.</span>
           </h1>
+
           <p>
             Find your people, build better study habits, and make learning
             something you look forward to.
@@ -62,10 +67,12 @@ export default function Register() {
               <span className="register-benefit-icon">✦</span>
               <span>Connect with study groups</span>
             </div>
+
             <div className="register-benefit">
               <span className="register-benefit-icon">✓</span>
               <span>Keep track of assignments</span>
             </div>
+
             <div className="register-benefit">
               <span className="register-benefit-icon">♡</span>
               <span>Learn better, together</span>

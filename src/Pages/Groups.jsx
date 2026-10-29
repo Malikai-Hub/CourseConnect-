@@ -1,48 +1,58 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../Auth/authContext";
-import { useState, useEffect } from "react";
-import "./css/groups.css";
+import "../Pages/css/groups.css";
 
 const API = import.meta.env.VITE_API;
 
-export default function Group() {
+export default function Groups() {
   const { token } = useAuth();
 
-  const [error, setError] = useState("");
   const [groups, setGroups] = useState([]);
-  const [search, setSearch] = useState("");
   const [groupTitle, setGroupTitle] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // Used BookBuddy to help me write useEffect
+  // Load all public groups, whether the visitor is logged in or not.
   useEffect(() => {
-    const syncGroups = async () => {
+    async function getGroups() {
       try {
+        setLoading(true);
+        setError("");
+
         const response = await fetch(`${API}/groups/browse`);
 
         if (!response.ok) {
-          throw new Error("Failed to load groups.");
+          const message = await response.text();
+          throw new Error(message || "Could not load groups.");
         }
 
         const data = await response.json();
         setGroups(data);
       } catch (error) {
+        console.error(error);
         setError(error.message);
+      } finally {
+        setLoading(false);
       }
-    };
+    }
 
-    syncGroups();
+    getGroups();
   }, []);
 
-  const filteredGroups = groups.filter((group) =>
-    group.group_title.toLowerCase().includes(search.trim().toLowerCase()),
-  );
+  async function handleCreateGroup(event) {
+    event.preventDefault();
 
-  async function handleCreateGroup(e) {
-    e.preventDefault();
-    setError("");
+    if (!token) {
+      setError("Please log in to create a study group.");
+      return;
+    }
 
     try {
+      setError("");
+
       const response = await fetch(`${API}/groups`, {
         method: "POST",
         headers: {
@@ -55,28 +65,34 @@ export default function Group() {
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "Failed to create group.");
+        const message = await response.text();
+        throw new Error(message || "Could not create group.");
       }
 
-      setGroups((currentGroups) => [data, ...currentGroups]);
+      const newGroup = await response.json();
+
+      // Add the new group to the displayed list.
+      setGroups((currentGroups) => [...currentGroups, newGroup]);
       setGroupTitle("");
       setGroupDescription("");
     } catch (error) {
+      console.error(error);
       setError(error.message);
     }
   }
 
+  const filteredGroups = groups.filter((group) =>
+    group.group_title.toLowerCase().includes(search.trim().toLowerCase()),
+  );
+
   return (
     <div className="groups-page">
-      {/* Navigation */}
-      <nav className="groups-topbar">
-        <Link to="/" className="groups-logo">
+      <header className="groups-topbar">
+        <Link to="/" className="groups-logo" aria-label="Course Connect home">
           <span className="groups-cc-logo" aria-hidden="true">
-            <span className="groups-cc-shape groups-cc-purple" />
-            <span className="groups-cc-shape groups-cc-orange" />
+            <span className="groups-cc-shape groups-cc-purple"></span>
+            <span className="groups-cc-shape groups-cc-orange"></span>
           </span>
 
           <span className="groups-logo-text">
@@ -84,12 +100,12 @@ export default function Group() {
           </span>
         </Link>
 
-        <div className="groups-nav">
+        <nav className="groups-nav">
           <Link to="/" className="groups-nav-link">
             Home
           </Link>
           <Link to="/Study" className="groups-nav-link">
-            Study Sets
+            Study
           </Link>
           <Link to="/Groups" className="groups-nav-link active">
             Groups
@@ -97,7 +113,7 @@ export default function Group() {
           <Link to="/Assignments" className="groups-nav-link">
             Assignments
           </Link>
-        </div>
+        </nav>
 
         <div className="groups-nav-actions">
           <Link
@@ -108,71 +124,73 @@ export default function Group() {
             👤
           </Link>
         </div>
-      </nav>
+      </header>
 
       <main className="groups-main">
-        {/* Hero section */}
         <section className="groups-hero">
           <div className="groups-hero-content">
             <p className="groups-eyebrow">LEARN TOGETHER</p>
 
             <h1>
-              Find your
-              <span>study people.</span>
+              Find your people.
+              <span>Study smarter together.</span>
             </h1>
 
             <p className="groups-hero-description">
-              Connect with other students, discover study groups, and make
-              learning a little less lonely.
+              Create a study group, connect with classmates, and keep everyone
+              moving toward the same goal.
             </p>
           </div>
 
-          <div className="groups-hero-decoration">
-            <span className="groups-people-icon" aria-hidden="true">
+          <div className="groups-hero-decoration" aria-hidden="true">
+            <div className="groups-people-icon">
               <svg viewBox="0 0 24 24">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                <circle cx="9" cy="8" r="3"></circle>
+                <circle cx="17" cy="9" r="2"></circle>
+                <path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"></path>
+                <path d="M15 14c3 0 5 1.7 5 4"></path>
               </svg>
-            </span>
+            </div>
+
             <p>
-              Better together,
+              Connect.
               <br />
-              one session at a time.
+              Collaborate.
+              <br />
+              Grow.
             </p>
           </div>
         </section>
 
-        {/* Search and create group */}
         <section className="groups-tools">
           <div className="groups-search-card">
             <div className="groups-section-heading">
               <span className="groups-heading-icon groups-purple-icon">
-                <svg viewBox="0 0 24 24">
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m20 20-4-4" />
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="6"></circle>
+                  <path d="m16 16 4 4"></path>
                 </svg>
               </span>
 
               <div>
-                <p>DISCOVER</p>
-                <h2>Find a study group</h2>
+                <p>FIND YOUR COMMUNITY</p>
+                <h2>Search Groups</h2>
               </div>
             </div>
 
             <form
               className="groups-search-form"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={(event) => event.preventDefault()}
             >
               <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
                 name="search"
                 type="search"
-                placeholder="Search by group name..."
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search for a group..."
                 aria-label="Search for a group"
               />
+
               <button type="submit">Search</button>
             </form>
           </div>
@@ -180,14 +198,14 @@ export default function Group() {
           <div className="groups-create-card">
             <div className="groups-section-heading">
               <span className="groups-heading-icon groups-orange-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 5v14M5 12h14" />
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14"></path>
                 </svg>
               </span>
 
               <div>
-                <p>START SOMETHING</p>
-                <h2>Create a study group</h2>
+                <p>START SOMETHING NEW</p>
+                <h2>Create a Group</h2>
               </div>
             </div>
 
@@ -197,24 +215,26 @@ export default function Group() {
                   Group name
                   <input
                     value={groupTitle}
-                    onChange={(e) => setGroupTitle(e.target.value)}
-                    placeholder="e.g. Biology Study Buddies"
+                    onChange={(event) => setGroupTitle(event.target.value)}
+                    placeholder="Enter group name..."
                     required
                   />
                 </label>
 
                 <label>
-                  Description
+                  Group description
                   <input
                     value={groupDescription}
-                    onChange={(e) => setGroupDescription(e.target.value)}
+                    onChange={(event) =>
+                      setGroupDescription(event.target.value)
+                    }
                     placeholder="What will your group study?"
                     required
                   />
                 </label>
 
                 <button type="submit">
-                  <span aria-hidden="true">+</span> Create group
+                  Create Group <span>→</span>
                 </button>
               </form>
             ) : (
@@ -225,12 +245,17 @@ export default function Group() {
           </div>
         </section>
 
-        {/* Group list */}
+        {error && (
+          <div className="groups-error" role="alert">
+            {error}
+          </div>
+        )}
+
         <section className="my-groups-section">
           <div className="my-groups-heading">
             <div>
-              <p>YOUR NEXT STUDY SESSION STARTS HERE</p>
-              <h2>Explore study groups</h2>
+              <p>YOUR COMMUNITY</p>
+              <h2>Study Groups</h2>
             </div>
 
             <span className="group-count">
@@ -239,14 +264,20 @@ export default function Group() {
             </span>
           </div>
 
-          {error && <p className="groups-error">{error}</p>}
+          {loading && (
+            <div className="groups-status">
+              <p>Loading study groups...</p>
+            </div>
+          )}
 
-          {filteredGroups.length === 0 ? (
+          {!loading && !error && filteredGroups.length === 0 && (
             <div className="groups-empty-state">
               <span className="groups-empty-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m20 20-4-4" />
+                  <circle cx="9" cy="8" r="3"></circle>
+                  <circle cx="17" cy="9" r="2"></circle>
+                  <path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"></path>
+                  <path d="M15 14c3 0 5 1.7 5 4"></path>
                 </svg>
               </span>
 
@@ -259,22 +290,24 @@ export default function Group() {
                 <p>
                   {search.trim()
                     ? "Try another group name or clear your search."
-                    : "Be the first to create a group and invite other students."}
+                    : "Be the first to create a group and start studying together."}
                 </p>
               </div>
             </div>
-          ) : (
+          )}
+
+          {!loading && filteredGroups.length > 0 && (
             <div className="groups-grid">
               {filteredGroups.map((group) => (
                 <article className="group-card" key={group.group_id}>
-                  <span className="group-card-icon" aria-hidden="true">
+                  <div className="group-card-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                      <circle cx="9" cy="8" r="3"></circle>
+                      <circle cx="17" cy="9" r="2"></circle>
+                      <path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"></path>
+                      <path d="M15 14c3 0 5 1.7 5 4"></path>
                     </svg>
-                  </span>
+                  </div>
 
                   <div className="group-card-content">
                     <p className="group-label">STUDY GROUP</p>
@@ -288,7 +321,7 @@ export default function Group() {
                     to={`/Groups/${group.group_id}`}
                     className="group-card-link"
                   >
-                    View group <span aria-hidden="true">→</span>
+                    View group <span>→</span>
                   </Link>
                 </article>
               ))}
@@ -296,12 +329,9 @@ export default function Group() {
           )}
         </section>
 
-        {/* Footer */}
         <footer className="groups-footer">
-          <p>
-            Made for students, <span>by students.</span>
-          </p>
-          <p>Course Connect © {new Date().getFullYear()}</p>
+          <span>Course Connect</span>
+          <p>Study • Plan • Connect • Succeed</p>
         </footer>
       </main>
     </div>

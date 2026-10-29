@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../Auth/authContext";
 import { useEffect, useState } from "react";
-import "./css/profile.css";
+import "../Pages/css/profile.css";
 
 const API = import.meta.env.VITE_API;
 
@@ -62,11 +62,11 @@ export default function Profile() {
 
   return (
     <div className="profile-page">
-      <nav className="profile-topbar">
-        <Link to="/" className="profile-logo">
+      <header className="profile-topbar">
+        <Link to="/" className="profile-logo" aria-label="Course Connect home">
           <span className="profile-cc-logo" aria-hidden="true">
-            <span className="profile-cc-shape profile-cc-purple" />
-            <span className="profile-cc-shape profile-cc-orange" />
+            <span className="profile-cc-shape profile-cc-purple"></span>
+            <span className="profile-cc-shape profile-cc-orange"></span>
           </span>
 
           <span className="profile-logo-text">
@@ -74,12 +74,12 @@ export default function Profile() {
           </span>
         </Link>
 
-        <div className="profile-nav">
+        <nav className="profile-nav">
           <Link to="/" className="profile-nav-link">
             Home
           </Link>
           <Link to="/Study" className="profile-nav-link">
-            Study Sets
+            Study
           </Link>
           <Link to="/Groups" className="profile-nav-link">
             Groups
@@ -90,28 +90,27 @@ export default function Profile() {
           <Link to="/Profile" className="profile-nav-link active">
             Profile
           </Link>
-        </div>
+        </nav>
 
         <div className="profile-nav-actions">
           {token ? (
-            <button
-              type="button"
+            <span
               className="profile-circle"
               title={`Logged in as ${username || "user"}`}
               aria-label={`Profile for ${username || "user"}`}
             >
               {firstInitial}
-            </button>
+            </span>
           ) : (
             <Link to="/Login" className="profile-signin-button">
               Sign In
             </Link>
           )}
         </div>
-      </nav>
+      </header>
 
       <main className="profile-main">
-        <header className="profile-hero">
+        <section className="profile-hero">
           <div className="profile-avatar" aria-label="Profile initial">
             {firstInitial}
           </div>
@@ -151,7 +150,7 @@ export default function Profile() {
               big progress!
             </p>
           </div>
-        </header>
+        </section>
 
         <section className="profile-stats">
           <article className="profile-stat-card">
@@ -162,7 +161,6 @@ export default function Profile() {
                 <path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
             </span>
-
             <div>
               <strong>{activeGroups.length}</strong>
               <p>Active Groups</p>
@@ -176,7 +174,6 @@ export default function Profile() {
                 <path d="M8 7h8M8 12h8M8 17h5" />
               </svg>
             </span>
-
             <div>
               <strong>{activeAssignments.length}</strong>
               <p>Active Assignments</p>
@@ -190,7 +187,6 @@ export default function Profile() {
                 <path d="m8 12 3 3 5-6" />
               </svg>
             </span>
-
             <div>
               <strong>{activeGroups.length + activeAssignments.length}</strong>
               <p>Learning Activities</p>
@@ -205,7 +201,6 @@ export default function Profile() {
                 <p>LEARN TOGETHER</p>
                 <h2>My Study Groups</h2>
               </div>
-
               <Link to="/Groups">Explore Groups →</Link>
             </div>
 
@@ -230,12 +225,10 @@ export default function Profile() {
                 {activeGroups.map((group) => (
                   <article className="profile-group-card" key={group.group_id}>
                     <span className="profile-group-icon">📚</span>
-
                     <div>
                       <h3>{group.group_title}</h3>
                       <p>{group.group_description}</p>
                     </div>
-
                     <Link to={`/Groups/${group.group_id}`}>View →</Link>
                   </article>
                 ))}
@@ -249,7 +242,6 @@ export default function Profile() {
                 <p>STAY ON TRACK</p>
                 <h2>My Assignments</h2>
               </div>
-
               <Link to="/Assignments">View All →</Link>
             </div>
 
@@ -296,7 +288,9 @@ export default function Profile() {
                     <p className="profile-assignment-due">
                       <strong>Due:</strong>{" "}
                       {assignment.due_date
-                        ? new Date(assignment.due_date).toLocaleDateString()
+                        ? new Date(
+                            `${String(assignment.due_date).slice(0, 10)}T00:00:00`,
+                          ).toLocaleDateString()
                         : "No due date"}
                     </p>
                   </article>

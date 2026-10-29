@@ -16,10 +16,11 @@ export default function Login() {
     const password = formData.get("password");
 
     try {
+      setError("");
       await login({ email, password });
       navigate("/");
-    } catch (e) {
-      setError("Unable to sign in. Please check your details and try again.");
+    } catch {
+      setError("Unable to sign in. Please check your email and password.");
     }
   };
 
