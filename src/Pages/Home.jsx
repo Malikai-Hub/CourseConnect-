@@ -16,7 +16,7 @@ export default function Home() {
           <Link to="/" className="nav-link active">
             🏠 Dashboard
           </Link>
-          <Link to="/Study" className="nav-link">
+          <Link to="#" className="nav-link">
             📚 Study
           </Link>
           <Link to="/Groups" className="nav-link">
